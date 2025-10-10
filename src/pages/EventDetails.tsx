@@ -1,0 +1,242 @@
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import Navbar from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Calendar, MapPin, Users, Heart, Share2, Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import techEvent from "@/assets/events/tech-event.jpg";
+
+const EventDetails = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [event, setEvent] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [booking, setBooking] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [hasBooked, setHasBooked] = useState(false);
+
+  useEffect(() => {
+    fetchEvent();
+    checkAuth();
+  }, [id]);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    setUser(session?.user || null);
+    
+    if (session?.user && id) {
+      const { data } = await supabase
+        .from("bookings")
+        .select("*")
+        .eq("event_id", id)
+        .eq("user_id", session.user.id)
+        .single();
+      
+      setHasBooked(!!data);
+    }
+  };
+
+  const fetchEvent = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("events")
+        .select(`
+          *,
+          profiles:organizer_id (username, avatar_url),
+          bookings (count)
+        `)
+        .eq("id", id)
+        .single();
+
+      if (error) throw error;
+
+      setEvent({
+        ...data,
+        image_url: data.image_url || techEvent,
+      });
+    } catch (error) {
+      console.error("Error fetching event:", error);
+      toast.error("Event not found");
+      navigate("/");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBooking = async () => {
+    if (!user) {
+      toast.error("Please sign in to book this event");
+      navigate("/auth");
+      return;
+    }
+
+    setBooking(true);
+
+    try {
+      const { error } = await supabase.from("bookings").insert({
+        event_id: id,
+        user_id: user.id,
+        payment_status: event.is_free ? "completed" : "pending",
+      });
+
+      if (error) throw error;
+
+      toast.success("Event booked successfully!");
+      setHasBooked(true);
+      fetchEvent();
+    } catch (error: any) {
+      toast.error(error.message || "Failed to book event");
+    } finally {
+      setBooking(false);
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      await navigator.share({
+        title: event.title,
+        text: event.description,
+        url: window.location.href,
+      });
+    } catch (error) {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copied to clipboard!");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!event) return null;
+
+  const formattedDate = new Date(event.date).toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const categoryColors: Record<string, string> = {
+    Tech: "bg-accent text-accent-foreground",
+    Music: "bg-secondary text-secondary-foreground",
+    Travel: "bg-primary text-primary-foreground",
+    Parties: "bg-secondary text-secondary-foreground",
+    Campus: "bg-accent text-accent-foreground",
+    Sports: "bg-primary text-primary-foreground",
+    Art: "bg-secondary text-secondary-foreground",
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      
+      <div className="pt-16">
+        <div className="relative h-[60vh] overflow-hidden">
+          <img
+            src={event.image_url}
+            alt={event.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+        </div>
+
+        <div className="container mx-auto px-4 -mt-32 relative z-10">
+          <Card className="p-8 shadow-2xl max-w-4xl mx-auto bg-card/95 backdrop-blur-sm">
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex-1">
+                <Badge className={categoryColors[event.category] || "bg-primary"}>
+                  {event.category}
+                </Badge>
+                <h1 className="text-4xl font-bold mt-4 mb-2">{event.title}</h1>
+                <p className="text-muted-foreground">
+                  by {event.profiles?.username || "Unknown"}
+                </p>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button variant="outline" size="icon" onClick={handleShare}>
+                  <Share2 className="w-5 h-5" />
+                </Button>
+                <Button variant="outline" size="icon">
+                  <Heart className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-4 mb-8 p-4 bg-muted rounded-lg">
+              <div className="flex items-center gap-3">
+                <Calendar className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Date</p>
+                  <p className="font-medium">{formattedDate}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <MapPin className="w-5 h-5 text-secondary" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Location</p>
+                  <p className="font-medium">{event.location}</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <Users className="w-5 h-5 text-accent" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Attending</p>
+                  <p className="font-medium">{event.bookings?.[0]?.count || 0} people</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="prose max-w-none mb-8">
+              <h3 className="text-xl font-semibold mb-3">About This Event</h3>
+              <p className="text-muted-foreground whitespace-pre-wrap">{event.description}</p>
+            </div>
+
+            <div className="flex items-center justify-between pt-6 border-t border-border">
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Price</p>
+                {event.is_free ? (
+                  <p className="text-3xl font-bold text-primary">Free</p>
+                ) : (
+                  <p className="text-3xl font-bold">KSh {event.price}</p>
+                )}
+              </div>
+
+              <Button
+                size="lg"
+                className="bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
+                onClick={handleBooking}
+                disabled={booking || hasBooked}
+              >
+                {booking ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Booking...
+                  </>
+                ) : hasBooked ? (
+                  "Already Booked"
+                ) : (
+                  "Book Now"
+                )}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EventDetails;
