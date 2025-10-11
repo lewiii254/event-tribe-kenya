@@ -5,9 +5,12 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Calendar, MapPin, Users, Heart, Share2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import techEvent from "@/assets/events/tech-event.jpg";
+import EventComments from "@/components/EventComments";
+import QRTicket from "@/components/QRTicket";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -17,11 +20,36 @@ const EventDetails = () => {
   const [booking, setBooking] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [hasBooked, setHasBooked] = useState(false);
+  const [userBooking, setUserBooking] = useState<any>(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => {
     fetchEvent();
     checkAuth();
-  }, [id]);
+
+    // Subscribe to booking updates for realtime QR code
+    const channel = supabase
+      .channel(`booking-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'bookings',
+          filter: `event_id=eq.${id}`
+        },
+        (payload) => {
+          if (payload.new.user_id === user?.id) {
+            setUserBooking(payload.new);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [id, user]);
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -33,9 +61,12 @@ const EventDetails = () => {
         .select("*")
         .eq("event_id", id)
         .eq("user_id", session.user.id)
-        .single();
+        .maybeSingle();
       
-      setHasBooked(!!data);
+      if (data) {
+        setHasBooked(true);
+        setUserBooking(data);
+      }
     }
   };
 
@@ -73,18 +104,58 @@ const EventDetails = () => {
       return;
     }
 
+    if (!event.is_free && !phoneNumber) {
+      toast.error("Please enter your phone number for M-Pesa payment");
+      return;
+    }
+
     setBooking(true);
 
     try {
-      const { error } = await supabase.from("bookings").insert({
-        event_id: id,
-        user_id: user.id,
-        payment_status: event.is_free ? "completed" : "pending",
-      });
+      const { data: newBooking, error } = await supabase
+        .from("bookings")
+        .insert({
+          event_id: id,
+          user_id: user.id,
+          payment_status: event.is_free ? "completed" : "pending",
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
-      toast.success("Event booked successfully!");
+      if (event.is_free) {
+        // Generate QR for free events immediately
+        const qrCodeData = `EVENTTRIBE-${newBooking.id}-${Date.now()}`;
+        await supabase
+          .from("bookings")
+          .update({ qr_code: qrCodeData })
+          .eq("id", newBooking.id);
+        
+        setUserBooking({ ...newBooking, qr_code: qrCodeData });
+        toast.success("Event booked successfully!");
+      } else {
+        // Initiate M-Pesa payment
+        const { data, error: paymentError } = await supabase.functions.invoke(
+          "mpesa-payment",
+          {
+            body: {
+              bookingId: newBooking.id,
+              phoneNumber: phoneNumber,
+            },
+          }
+        );
+
+        if (paymentError) throw paymentError;
+
+        if (data.success) {
+          toast.success(data.message);
+          setUserBooking(newBooking);
+        } else {
+          throw new Error(data.error);
+        }
+      }
+
       setHasBooked(true);
       fetchEvent();
     } catch (error: any) {
@@ -204,34 +275,61 @@ const EventDetails = () => {
               <p className="text-muted-foreground whitespace-pre-wrap">{event.description}</p>
             </div>
 
-            <div className="flex items-center justify-between pt-6 border-t border-border">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Price</p>
-                {event.is_free ? (
-                  <p className="text-3xl font-bold text-primary">Free</p>
-                ) : (
-                  <p className="text-3xl font-bold">KSh {event.price}</p>
-                )}
+            {userBooking?.qr_code ? (
+              <div className="pt-6 border-t border-border">
+                <QRTicket
+                  qrCode={userBooking.qr_code}
+                  eventTitle={event.title}
+                  eventDate={event.date}
+                  bookingId={userBooking.id}
+                />
               </div>
+            ) : (
+              <div className="pt-6 border-t border-border">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">Price</p>
+                    {event.is_free ? (
+                      <p className="text-3xl font-bold text-primary">Free</p>
+                    ) : (
+                      <p className="text-3xl font-bold">KSh {event.price}</p>
+                    )}
+                  </div>
+                </div>
 
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
-                onClick={handleBooking}
-                disabled={booking || hasBooked}
-              >
-                {booking ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Booking...
-                  </>
-                ) : hasBooked ? (
-                  "Already Booked"
-                ) : (
-                  "Book Now"
+                {!event.is_free && !hasBooked && (
+                  <Input
+                    type="tel"
+                    placeholder="M-Pesa Phone (e.g., 0712345678)"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    className="mb-4"
+                  />
                 )}
-              </Button>
-            </div>
+
+                <Button
+                  size="lg"
+                  className="w-full bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
+                  onClick={handleBooking}
+                  disabled={booking || hasBooked}
+                >
+                  {booking ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      {event.is_free ? "Booking..." : "Processing Payment..."}
+                    </>
+                  ) : hasBooked ? (
+                    userBooking?.payment_status === 'pending' ? "Payment Pending..." : "Already Booked"
+                  ) : (
+                    event.is_free ? "Book Now" : "Pay with M-Pesa"
+                  )}
+                </Button>
+              </div>
+            )}
+          </Card>
+
+          <Card className="p-8 mt-6">
+            <EventComments eventId={id!} user={user} />
           </Card>
         </div>
       </div>
