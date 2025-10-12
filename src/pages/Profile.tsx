@@ -6,11 +6,12 @@ import EventCard from "@/components/EventCard";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Ticket, Sparkles, Loader2 } from "lucide-react";
+import { Calendar, Ticket, Sparkles, Loader2, Settings } from "lucide-react";
 import techEvent from "@/assets/events/tech-event.jpg";
 import musicEvent from "@/assets/events/music-event.jpg";
 import travelEvent from "@/assets/events/travel-event.jpg";
 import partyEvent from "@/assets/events/party-event.jpg";
+import NotificationPreferences from "@/components/NotificationPreferences";
 
 const Profile = () => {
   const [user, setUser] = useState<any>(null);
@@ -131,7 +132,7 @@ const Profile = () => {
           </Card>
 
           <Tabs defaultValue="created" className="w-full">
-            <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
+            <TabsList className="grid w-full max-w-2xl grid-cols-3 mb-8">
               <TabsTrigger value="created" className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 My Events
@@ -139,6 +140,10 @@ const Profile = () => {
               <TabsTrigger value="booked" className="flex items-center gap-2">
                 <Ticket className="w-4 h-4" />
                 Joined Events
+              </TabsTrigger>
+              <TabsTrigger value="settings" className="flex items-center gap-2">
+                <Settings className="w-4 h-4" />
+                Settings
               </TabsTrigger>
             </TabsList>
 
@@ -204,6 +209,10 @@ const Profile = () => {
                   ))}
                 </div>
               )}
+            </TabsContent>
+
+            <TabsContent value="settings" className="space-y-6">
+              <NotificationPreferences userId={user?.id} />
             </TabsContent>
           </Tabs>
         </div>
