@@ -14,14 +14,17 @@ A modern event management platform for discovering, booking, and managing events
 - **Price Range Filter**: Set custom price ranges to find events within your budget
 - **Free Events Filter**: Toggle to show only free events
 - **Smart Sorting**: Sort by date, price (low to high, high to low), or popularity
+- **AI-Powered Recommendations**: Personalized event suggestions based on user interests and booking history
 
 ### Event Details
-- **Capacity Indicators**: Visual progress bars showing event capacity
+- **Capacity Indicators**: Visual progress bars showing event capacity with real-time updates
 - **Event Reminders**: Set reminders (1 day, 1 hour, or 30 minutes before event)
 - **Social Sharing**: Share events on Twitter, Facebook, WhatsApp, LinkedIn, or copy link
 - **Ratings & Reviews**: Rate and review events after attendance
 - **Real-time Updates**: Live updates on bookings and event changes
 - **Comments & Discussions**: Engage with other attendees
+- **Waiting List**: Join waitlist when events are full and get notified when spots open
+- **Calendar Integration**: Export events to Google Calendar, Outlook, or download iCal files
 
 ### Booking & Tickets
 - **Instant Booking**: Quick booking for free events
@@ -29,11 +32,21 @@ A modern event management platform for discovering, booking, and managing events
 - **QR Code Tickets**: Digital tickets with QR codes for easy check-in
 - **Booking Confirmation**: Confirmation dialog before finalizing bookings
 - **Booking Cancellation**: Cancel bookings for upcoming events with refund processing
+- **Group Bookings**: Book multiple tickets at once with automatic group discounts (10% off for 5+ attendees, 15% off for 10+)
+- **Early Bird Pricing**: Special discounted pricing for early bookings
+- **Real-time Booking Count**: See live updates as people book events
 
 ### User Management
 - **My Bookings**: View and manage all your event bookings
 - **Favorites**: Save events to your favorites list
 - **Profile Management**: Update your profile and preferences
+- **Notification Preferences**: Customize email, WhatsApp, and SMS notification settings
+
+### Organizer Features
+- **Event Analytics Dashboard**: Track views, bookings, shares, and engagement metrics
+- **Capacity Management**: Set maximum attendees and monitor capacity in real-time
+- **Flexible Pricing**: Support for free events, paid events, early bird pricing, and group discounts
+- **Attendee Management**: View and manage event attendees
 
 ## Technologies
 
@@ -51,8 +64,19 @@ This project is built with:
 - Fixed event navigation issue causing "Event not found" errors
 - Fixed RLS policies for proper booking count visibility
 - Resolved race conditions in event loading
+- **Fixed real-time booking count updates** - Booking count now updates live when anyone books an event
 
-### New Features
+### New Features (Latest Release)
+- **Waiting List System**: Join waitlist when events are full, with automatic position tracking
+- **Group Booking**: Book multiple tickets with automatic discounts (10% for 5+, 15% for 10+ attendees)
+- **Calendar Integration**: Export events to Google Calendar, Outlook, or iCal format
+- **Event Recommendations**: AI-powered personalized event suggestions based on interests
+- **Event Analytics**: Track views, bookings, shares for organizers
+- **Early Bird Pricing**: Support for time-limited early bird discounts
+- **Enhanced WhatsApp Integration**: Share events and reminders via WhatsApp
+- **Real-time Booking Updates**: Live subscription to booking changes
+
+### Previous Features
 - Event capacity visual indicators with "Almost full!" warnings
 - Booking confirmation dialogs
 - Event cancellation with refund notices

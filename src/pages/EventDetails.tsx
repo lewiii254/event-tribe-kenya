@@ -34,6 +34,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EventRatings from "@/components/EventRatings";
 import FavoriteButton from "@/components/FavoriteButton";
 import AttendeesList from "@/components/AttendeesList";
+import WaitlistButton from "@/components/WaitlistButton";
+import CalendarExport from "@/components/CalendarExport";
+import GroupBooking from "@/components/GroupBooking";
+import EventRecommendations from "@/components/EventRecommendations";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -59,7 +63,7 @@ const EventDetails = () => {
 
     initializePage();
 
-    // Subscribe to booking updates for realtime QR code
+    // Subscribe to booking updates for realtime QR code and booking count
     const channel = supabase
       .channel(`booking-${id}`)
       .on(
@@ -74,6 +78,32 @@ const EventDetails = () => {
           if (payload.new.user_id === user?.id) {
             setUserBooking(payload.new);
           }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'bookings',
+          filter: `event_id=eq.${id}`
+        },
+        () => {
+          // Refetch event to update booking count when anyone books
+          fetchEvent();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'bookings',
+          filter: `event_id=eq.${id}`
+        },
+        () => {
+          // Refetch event to update booking count when anyone cancels
+          fetchEvent();
         }
       )
       .subscribe();
@@ -274,7 +304,7 @@ const EventDetails = () => {
     }
   };
 
-  const shareToSocialMedia = (platform: string) => {
+  const shareToSocialMedia = async (platform: string) => {
     const url = encodeURIComponent(window.location.href);
     const text = encodeURIComponent(`Check out ${event.title}!`);
     
@@ -295,6 +325,17 @@ const EventDetails = () => {
         break;
       default:
         return;
+    }
+    
+    // Track share in analytics
+    try {
+      await supabase.rpc("increment_event_analytics", {
+        p_event_id: id,
+        p_metric: "shares",
+        p_increment: 1,
+      });
+    } catch (error) {
+      console.error("Error tracking share:", error);
     }
     
     window.open(shareUrl, "_blank", "width=600,height=400");
@@ -725,11 +766,61 @@ const EventDetails = () => {
                     event.is_free ? "Book Now" : "Pay with M-Pesa"
                   )}
                 </Button>
+
+                {/* Group Booking Option */}
+                {!hasBooked && (
+                  <div className="mt-3">
+                    <GroupBooking
+                      event={event}
+                      userId={user?.id}
+                      onBookingComplete={fetchEvent}
+                    />
+                  </div>
+                )}
+
+                {/* Waitlist Button */}
+                {event.max_attendees && (
+                  <div className="mt-3">
+                    <WaitlistButton
+                      eventId={id!}
+                      userId={user?.id}
+                      isEventFull={
+                        (event.bookings?.[0]?.count || 0) >= event.max_attendees
+                      }
+                      hasBooked={hasBooked}
+                      onJoinWaitlist={fetchEvent}
+                    />
+                  </div>
+                )}
+
+                {/* Calendar Export */}
+                {(hasBooked || !event.max_attendees || (event.bookings?.[0]?.count || 0) < event.max_attendees) && (
+                  <div className="mt-3">
+                    <CalendarExport
+                      event={{
+                        id: event.id,
+                        title: event.title,
+                        description: event.description,
+                        location: event.location,
+                        date: event.date,
+                      }}
+                      userId={user?.id}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </Card>
 
           <SimilarEvents currentEventId={id!} category={event.category} />
+
+          <div className="mt-6">
+            <EventRecommendations
+              userId={user?.id}
+              currentEventId={id!}
+              limit={4}
+            />
+          </div>
 
           <AttendeesList eventId={id!} />
 
