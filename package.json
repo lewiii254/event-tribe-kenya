@@ -1,7 +1,9 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "event-tribe-kenya",
+  "version": "1.0.0",
+  "description": "A modern event management platform for discovering, booking, and managing events in Kenya",
+  "author": "EventTribe Kenya Team",
   "private": true,
-  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
