@@ -44,6 +44,12 @@ const Navbar = () => {
             {user ? (
               <>
                 <Button variant="ghost" asChild>
+                  <Link to="/events">Events</Link>
+                </Button>
+                <Button variant="ghost" asChild>
+                  <Link to="/my-bookings">My Bookings</Link>
+                </Button>
+                <Button variant="ghost" asChild>
                   <Link to="/create">Create Event</Link>
                 </Button>
                 <Button variant="ghost" asChild>

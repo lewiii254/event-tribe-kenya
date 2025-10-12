@@ -43,8 +43,8 @@ const Hero = () => {
               asChild
               className="bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl transition-all text-lg px-8 py-6 rounded-full"
             >
-              <Link to="/auth">
-                Explore Events
+              <Link to="/events">
+                Browse Events
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
