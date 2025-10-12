@@ -11,6 +11,11 @@ import { toast } from "sonner";
 import techEvent from "@/assets/events/tech-event.jpg";
 import EventComments from "@/components/EventComments";
 import QRTicket from "@/components/QRTicket";
+import EventRating from "@/components/EventRating";
+import RatingDisplay from "@/components/RatingDisplay";
+import SimilarEvents from "@/components/SimilarEvents";
+import AttendeeList from "@/components/AttendeeList";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EventRatings from "@/components/EventRatings";
 import FavoriteButton from "@/components/FavoriteButton";
 import AttendeesList from "@/components/AttendeesList";
@@ -25,6 +30,8 @@ const EventDetails = () => {
   const [hasBooked, setHasBooked] = useState(false);
   const [userBooking, setUserBooking] = useState<any>(null);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteId, setFavoriteId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchEvent();
@@ -190,14 +197,49 @@ const EventDetails = () => {
 
   const handleShare = async () => {
     try {
-      await navigator.share({
-        title: event.title,
-        text: event.description,
-        url: window.location.href,
-      });
+      if (navigator.share) {
+        await navigator.share({
+          title: event.title,
+          text: event.description,
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!");
+      }
     } catch (error) {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copied to clipboard!");
+      console.error("Share error:", error);
+    }
+  };
+
+  const toggleFavorite = async () => {
+    if (!user) {
+      toast.error("Please sign in to save favorites");
+      navigate("/auth");
+      return;
+    }
+
+    try {
+      if (isFavorite && favoriteId) {
+        await supabase.from("event_favorites").delete().eq("id", favoriteId);
+        setIsFavorite(false);
+        setFavoriteId(null);
+        toast.success("Removed from favorites");
+      } else {
+        const { data, error } = await supabase
+          .from("event_favorites")
+          .insert({ event_id: id, user_id: user.id })
+          .select()
+          .single();
+        
+        if (error) throw error;
+        
+        setIsFavorite(true);
+        setFavoriteId(data.id);
+        toast.success("Added to favorites");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update favorites");
     }
   };
 
@@ -296,6 +338,55 @@ const EventDetails = () => {
               <p className="text-muted-foreground whitespace-pre-wrap">{event.description}</p>
             </div>
 
+            <AttendeeList eventId={id!} />
+
+            <Tabs defaultValue="details" className="mt-8">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="details">Details</TabsTrigger>
+                <TabsTrigger value="ratings">
+                  Ratings ({event.event_ratings?.length || 0})
+                </TabsTrigger>
+                <TabsTrigger value="discussion">Discussion</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="details" className="mt-6">
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Organizer</h4>
+                    <p className="text-muted-foreground">
+                      {event.profiles?.username || "Unknown"}
+                    </p>
+                  </div>
+                  {event.max_attendees && (
+                    <div>
+                      <h4 className="font-semibold mb-2">Capacity</h4>
+                      <p className="text-muted-foreground">
+                        {event.bookings?.[0]?.count || 0} / {event.max_attendees} spots filled
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="ratings" className="mt-6">
+                {user && hasBooked && userBooking?.payment_status === "completed" && (
+                  <div className="mb-6 p-4 border rounded-lg">
+                    <EventRating
+                      eventId={id!}
+                      userId={user.id}
+                      existingRating={event.event_ratings?.find((r: any) => r.user_id === user.id)}
+                      onRatingSubmit={fetchEvent}
+                    />
+                  </div>
+                )}
+                <RatingDisplay ratings={event.event_ratings || []} />
+              </TabsContent>
+
+              <TabsContent value="discussion" className="mt-6">
+                <EventComments eventId={id!} user={user} />
+              </TabsContent>
+            </Tabs>
+
             {userBooking?.qr_code ? (
               <div className="pt-6 border-t border-border">
                 <QRTicket
@@ -348,6 +439,8 @@ const EventDetails = () => {
               </div>
             )}
           </Card>
+
+          <SimilarEvents currentEventId={id!} category={event.category} />
 
           <AttendeesList eventId={id!} />
 
