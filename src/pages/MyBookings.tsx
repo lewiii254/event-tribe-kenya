@@ -4,8 +4,18 @@ import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Calendar, MapPin, Ticket } from "lucide-react";
+import { Loader2, Calendar, MapPin, Ticket, X } from "lucide-react";
 import { toast } from "sonner";
 import QRTicket from "@/components/QRTicket";
 import techEvent from "@/assets/events/tech-event.jpg";
@@ -14,6 +24,8 @@ const MyBookings = () => {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [cancellingBookingId, setCancellingBookingId] = useState<string | null>(null);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,6 +75,33 @@ const MyBookings = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCancelBooking = async () => {
+    if (!cancellingBookingId) return;
+
+    try {
+      const { error } = await supabase
+        .from("bookings")
+        .delete()
+        .eq("id", cancellingBookingId);
+
+      if (error) throw error;
+
+      toast.success("Booking cancelled successfully");
+      setBookings(bookings.filter((b) => b.id !== cancellingBookingId));
+    } catch (error) {
+      console.error("Error cancelling booking:", error);
+      toast.error("Failed to cancel booking");
+    } finally {
+      setShowCancelDialog(false);
+      setCancellingBookingId(null);
+    }
+  };
+
+  const initiateCancellation = (bookingId: string) => {
+    setCancellingBookingId(bookingId);
+    setShowCancelDialog(true);
   };
 
   if (loading) {
@@ -134,17 +173,31 @@ const MyBookings = () => {
                         </div>
                       </div>
                       
-                      <Badge
-                        variant={
-                          booking.payment_status === "completed"
-                            ? "default"
-                            : booking.payment_status === "pending"
-                            ? "secondary"
-                            : "destructive"
-                        }
-                      >
-                        {booking.payment_status}
-                      </Badge>
+                      <div className="flex gap-2">
+                        <Badge
+                          variant={
+                            booking.payment_status === "completed"
+                              ? "default"
+                              : booking.payment_status === "pending"
+                              ? "secondary"
+                              : "destructive"
+                          }
+                        >
+                          {booking.payment_status}
+                        </Badge>
+                        
+                        {new Date(booking.events.date) > new Date() && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => initiateCancellation(booking.id)}
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <X className="w-4 h-4 mr-1" />
+                            Cancel
+                          </Button>
+                        )}
+                      </div>
                     </div>
 
                     {booking.qr_code ? (
@@ -168,6 +221,32 @@ const MyBookings = () => {
           </div>
         )}
       </div>
+
+      {/* Cancellation Confirmation Dialog */}
+      <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Cancel Booking</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to cancel this booking? This action cannot be undone.
+              {cancellingBookingId && bookings.find(b => b.id === cancellingBookingId)?.payment_status === "completed" && (
+                <p className="mt-2 text-sm font-medium">
+                  Note: Refunds are processed within 5-7 business days.
+                </p>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep Booking</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleCancelBooking}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Cancel Booking
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
