@@ -55,8 +55,13 @@ const EventComments = ({ eventId, user }: EventCommentsProps) => {
     const { data, error } = await supabase
       .from("comments")
       .select(`
-        *,
-        profiles!comments_user_id_fkey(username)
+        id,
+        content,
+        created_at,
+        user_id,
+        profiles (
+          username
+        )
       `)
       .eq("event_id", eventId)
       .order("created_at", { ascending: false });
