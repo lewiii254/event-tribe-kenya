@@ -6,11 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Calendar, MapPin, Users, Heart, Share2, Loader2 } from "lucide-react";
+import { Calendar, MapPin, Users, Share2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import techEvent from "@/assets/events/tech-event.jpg";
 import EventComments from "@/components/EventComments";
 import QRTicket from "@/components/QRTicket";
+import EventRatings from "@/components/EventRatings";
+import FavoriteButton from "@/components/FavoriteButton";
+import AttendeesList from "@/components/AttendeesList";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -71,6 +74,11 @@ const EventDetails = () => {
   };
 
   const fetchEvent = async () => {
+    if (!id) {
+      navigate("/");
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from("events")
@@ -80,17 +88,32 @@ const EventDetails = () => {
           bookings (count)
         `)
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching event:", error);
+        throw error;
+      }
+
+      if (!data) {
+        toast.error("Event not found");
+        navigate("/");
+        return;
+      }
 
       setEvent({
         ...data,
         image_url: data.image_url || techEvent,
       });
+
+      // Track event view
+      await supabase.from("event_views").insert({
+        event_id: id,
+        user_id: user?.id || null,
+      });
     } catch (error) {
       console.error("Error fetching event:", error);
-      toast.error("Event not found");
+      toast.error("Failed to load event. Please try again.");
       navigate("/");
     } finally {
       setLoading(false);
@@ -238,9 +261,7 @@ const EventDetails = () => {
                 <Button variant="outline" size="icon" onClick={handleShare}>
                   <Share2 className="w-5 h-5" />
                 </Button>
-                <Button variant="outline" size="icon">
-                  <Heart className="w-5 h-5" />
-                </Button>
+                <FavoriteButton eventId={id!} user={user} />
               </div>
             </div>
 
@@ -326,6 +347,12 @@ const EventDetails = () => {
                 </Button>
               </div>
             )}
+          </Card>
+
+          <AttendeesList eventId={id!} />
+
+          <Card className="p-8 mt-6">
+            <EventRatings eventId={id!} user={user} />
           </Card>
 
           <Card className="p-8 mt-6">
