@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Calendar, MapPin, Users, Share2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import techEvent from "@/assets/events/tech-event.jpg";
@@ -32,10 +42,16 @@ const EventDetails = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState<string | null>(null);
+  const [showBookingDialog, setShowBookingDialog] = useState(false);
 
   useEffect(() => {
-    fetchEvent();
-    checkAuth();
+    const initializePage = async () => {
+      // First check auth, then fetch event
+      await checkAuth();
+      await fetchEvent();
+    };
+
+    initializePage();
 
     // Subscribe to booking updates for realtime QR code
     const channel = supabase
@@ -59,7 +75,7 @@ const EventDetails = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [id, user]);
+  }, [id]);
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -86,13 +102,16 @@ const EventDetails = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
       const { data, error } = await supabase
         .from("events")
         .select(`
           *,
           profiles:organizer_id (username, avatar_url),
-          bookings (count)
+          bookings (count),
+          event_ratings (rating, review, user_id, created_at)
         `)
         .eq("id", id)
         .maybeSingle();
@@ -113,10 +132,12 @@ const EventDetails = () => {
         image_url: data.image_url || techEvent,
       });
 
-      // Track event view
+      // Track event view - get current user
+      const { data: { session } } = await supabase.auth.getSession();
+      
       await supabase.from("event_views").insert({
         event_id: id,
-        user_id: user?.id || null,
+        user_id: session?.user?.id || null,
       });
     } catch (error) {
       console.error("Error fetching event:", error);
@@ -139,6 +160,8 @@ const EventDetails = () => {
       return;
     }
 
+    // Close the dialog and start booking
+    setShowBookingDialog(false);
     setBooking(true);
 
     try {
@@ -193,6 +216,25 @@ const EventDetails = () => {
     } finally {
       setBooking(false);
     }
+  };
+
+  const initiateBooking = () => {
+    if (!user) {
+      toast.error("Please sign in to book this event");
+      navigate("/auth");
+      return;
+    }
+
+    // Check if event is at capacity
+    if (event.max_attendees) {
+      const currentAttendees = event.bookings?.[0]?.count || 0;
+      if (currentAttendees >= event.max_attendees) {
+        toast.error("This event is at full capacity");
+        return;
+      }
+    }
+    
+    setShowBookingDialog(true);
   };
 
   const handleShare = async () => {
@@ -328,7 +370,36 @@ const EventDetails = () => {
                 <Users className="w-5 h-5 text-accent" />
                 <div>
                   <p className="text-sm text-muted-foreground">Attending</p>
-                  <p className="font-medium">{event.bookings?.[0]?.count || 0} people</p>
+                  <p className="font-medium">
+                    {event.bookings?.[0]?.count || 0} people
+                    {event.max_attendees && ` / ${event.max_attendees}`}
+                  </p>
+                  {event.max_attendees && (
+                    <div className="mt-1">
+                      {(() => {
+                        const percentage = ((event.bookings?.[0]?.count || 0) / event.max_attendees) * 100;
+                        return (
+                          <>
+                            <div className="w-full bg-muted-foreground/20 rounded-full h-1.5">
+                              <div
+                                className={`h-1.5 rounded-full transition-all ${
+                                  percentage >= 90
+                                    ? "bg-destructive"
+                                    : percentage >= 70
+                                    ? "bg-yellow-500"
+                                    : "bg-primary"
+                                }`}
+                                style={{ width: `${Math.min(percentage, 100)}%` }}
+                              />
+                            </div>
+                            {percentage >= 90 && (
+                              <p className="text-xs text-destructive mt-1">Almost full!</p>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -422,7 +493,7 @@ const EventDetails = () => {
                 <Button
                   size="lg"
                   className="w-full bg-primary hover:bg-primary/90 px-8 py-6 text-lg"
-                  onClick={handleBooking}
+                  onClick={initiateBooking}
                   disabled={booking || hasBooked}
                 >
                   {booking ? (
@@ -453,6 +524,38 @@ const EventDetails = () => {
           </Card>
         </div>
       </div>
+
+      {/* Booking Confirmation Dialog */}
+      <AlertDialog open={showBookingDialog} onOpenChange={setShowBookingDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirm Booking</AlertDialogTitle>
+            <AlertDialogDescription>
+              {event.is_free ? (
+                <>
+                  You're about to book <strong>{event.title}</strong> for free.
+                  <br />
+                  <br />
+                  Click confirm to proceed with your booking.
+                </>
+              ) : (
+                <>
+                  You're about to book <strong>{event.title}</strong> for <strong>KSh {event.price}</strong>.
+                  <br />
+                  <br />
+                  Please ensure your M-Pesa phone number ({phoneNumber}) is correct before proceeding.
+                </>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleBooking}>
+              Confirm Booking
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
