@@ -21,7 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar, MapPin, Users, Share2, Loader2 } from "lucide-react";
+import { Calendar, MapPin, Users, Share2, Loader2, Bell } from "lucide-react";
 import { toast } from "sonner";
 import techEvent from "@/assets/events/tech-event.jpg";
 import EventComments from "@/components/EventComments";
@@ -48,6 +48,7 @@ const EventDetails = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState<string | null>(null);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
+  const [reminders, setReminders] = useState<string[]>([]);
 
   useEffect(() => {
     const initializePage = async () => {
@@ -97,6 +98,17 @@ const EventDetails = () => {
       if (data) {
         setHasBooked(true);
         setUserBooking(data);
+      }
+
+      // Fetch existing reminders
+      const { data: reminderData } = await supabase
+        .from("event_reminders")
+        .select("notification_type")
+        .eq("event_id", id)
+        .eq("user_id", session.user.id);
+      
+      if (reminderData) {
+        setReminders(reminderData.map(r => r.notification_type));
       }
     }
   };
@@ -319,6 +331,61 @@ const EventDetails = () => {
     }
   };
 
+  const toggleReminder = async (notificationType: string) => {
+    if (!user) {
+      toast.error("Please sign in to set reminders");
+      navigate("/auth");
+      return;
+    }
+
+    try {
+      if (reminders.includes(notificationType)) {
+        // Remove reminder
+        await supabase
+          .from("event_reminders")
+          .delete()
+          .eq("event_id", id)
+          .eq("user_id", user.id)
+          .eq("notification_type", notificationType);
+        
+        setReminders(reminders.filter(r => r !== notificationType));
+        toast.success("Reminder removed");
+      } else {
+        // Add reminder
+        const eventDate = new Date(event.date);
+        let reminderTime: Date;
+
+        switch (notificationType) {
+          case "1_day":
+            reminderTime = new Date(eventDate.getTime() - 24 * 60 * 60 * 1000);
+            break;
+          case "1_hour":
+            reminderTime = new Date(eventDate.getTime() - 60 * 60 * 1000);
+            break;
+          case "30_min":
+            reminderTime = new Date(eventDate.getTime() - 30 * 60 * 1000);
+            break;
+          default:
+            return;
+        }
+
+        await supabase
+          .from("event_reminders")
+          .insert({
+            event_id: id,
+            user_id: user.id,
+            notification_type: notificationType,
+            reminder_time: reminderTime.toISOString(),
+          });
+        
+        setReminders([...reminders, notificationType]);
+        toast.success("Reminder set successfully");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Failed to update reminder");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -376,6 +443,60 @@ const EventDetails = () => {
               </div>
               
               <div className="flex gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" size="icon">
+                      <Bell className="w-5 h-5" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-56">
+                    <div className="grid gap-2">
+                      <h4 className="font-medium text-sm mb-2">Set Reminder</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="reminder-1-day"
+                            checked={reminders.includes("1_day")}
+                            onChange={() => toggleReminder("1_day")}
+                            className="h-4 w-4"
+                          />
+                          <label htmlFor="reminder-1-day" className="text-sm cursor-pointer">
+                            1 day before
+                          </label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="reminder-1-hour"
+                            checked={reminders.includes("1_hour")}
+                            onChange={() => toggleReminder("1_hour")}
+                            className="h-4 w-4"
+                          />
+                          <label htmlFor="reminder-1-hour" className="text-sm cursor-pointer">
+                            1 hour before
+                          </label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="checkbox"
+                            id="reminder-30-min"
+                            checked={reminders.includes("30_min")}
+                            onChange={() => toggleReminder("30_min")}
+                            className="h-4 w-4"
+                          />
+                          <label htmlFor="reminder-30-min" className="text-sm cursor-pointer">
+                            30 minutes before
+                          </label>
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Note: Reminders are shown as browser notifications
+                      </p>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button variant="outline" size="icon">

@@ -1,8 +1,66 @@
-# Welcome to your Lovable project
+# EventTribe Kenya
+
+A modern event management platform for discovering, booking, and managing events in Kenya.
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/718058d7-e10f-49b4-baae-566d0765853c
+
+## Features
+
+### Event Discovery
+- **Advanced Search**: Search events by title, description, or location
+- **Category Filtering**: Filter events by category (Tech, Music, Travel, Parties, Campus, Sports, Art)
+- **Price Range Filter**: Set custom price ranges to find events within your budget
+- **Free Events Filter**: Toggle to show only free events
+- **Smart Sorting**: Sort by date, price (low to high, high to low), or popularity
+
+### Event Details
+- **Capacity Indicators**: Visual progress bars showing event capacity
+- **Event Reminders**: Set reminders (1 day, 1 hour, or 30 minutes before event)
+- **Social Sharing**: Share events on Twitter, Facebook, WhatsApp, LinkedIn, or copy link
+- **Ratings & Reviews**: Rate and review events after attendance
+- **Real-time Updates**: Live updates on bookings and event changes
+- **Comments & Discussions**: Engage with other attendees
+
+### Booking & Tickets
+- **Instant Booking**: Quick booking for free events
+- **M-Pesa Integration**: Secure payment processing for paid events
+- **QR Code Tickets**: Digital tickets with QR codes for easy check-in
+- **Booking Confirmation**: Confirmation dialog before finalizing bookings
+- **Booking Cancellation**: Cancel bookings for upcoming events with refund processing
+
+### User Management
+- **My Bookings**: View and manage all your event bookings
+- **Favorites**: Save events to your favorites list
+- **Profile Management**: Update your profile and preferences
+
+## Technologies
+
+This project is built with:
+
+- **Frontend**: React, TypeScript, Vite
+- **UI Library**: shadcn-ui, Tailwind CSS
+- **Backend**: Supabase (PostgreSQL, Authentication, Realtime)
+- **Payment**: M-Pesa API Integration
+- **State Management**: React Hooks, TanStack Query
+
+## Recent Enhancements
+
+### Bug Fixes
+- Fixed event navigation issue causing "Event not found" errors
+- Fixed RLS policies for proper booking count visibility
+- Resolved race conditions in event loading
+
+### New Features
+- Event capacity visual indicators with "Almost full!" warnings
+- Booking confirmation dialogs
+- Event cancellation with refund notices
+- Social media sharing (Twitter, Facebook, WhatsApp, LinkedIn)
+- Event reminders (1 day, 1 hour, 30 minutes before)
+- Price range filtering
+- Multiple sorting options
+- Free events filter
 
 ## How can I edit this code?
 
