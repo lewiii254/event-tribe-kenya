@@ -38,6 +38,8 @@ import WaitlistButton from "@/components/WaitlistButton";
 import CalendarExport from "@/components/CalendarExport";
 import GroupBooking from "@/components/GroupBooking";
 import EventRecommendations from "@/components/EventRecommendations";
+import EventCheckIn from "@/components/EventCheckIn";
+import EventAnalytics from "@/components/EventAnalytics";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -823,6 +825,22 @@ const EventDetails = () => {
           </div>
 
           <AttendeesList eventId={id!} />
+
+          {/* Organizer Tools */}
+          {user && event.organizer_id === user.id && (
+            <>
+              <div className="mt-6">
+                <EventAnalytics eventId={id!} isOrganizer={true} />
+              </div>
+
+              <div className="mt-6">
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold mb-4">Organizer Tools</h3>
+                  <EventCheckIn eventId={id!} isOrganizer={true} />
+                </Card>
+              </div>
+            </>
+          )}
 
           <Card className="p-8 mt-6">
             <EventRatings eventId={id!} user={user} />
