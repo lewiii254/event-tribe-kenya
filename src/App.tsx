@@ -12,6 +12,8 @@ import Events from "./pages/Events";
 import MyBookings from "./pages/MyBookings";
 import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
+import OrganizerDashboard from "./pages/OrganizerDashboard";
+import ManageEvent from "./pages/ManageEvent";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,8 @@ const App = () => (
           <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/organizer" element={<OrganizerDashboard />} />
+          <Route path="/event/:id/manage" element={<ManageEvent />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

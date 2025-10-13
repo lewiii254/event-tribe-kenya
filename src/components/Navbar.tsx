@@ -1,22 +1,47 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sparkles, User, LogOut, Heart } from "lucide-react";
+import { Sparkles, User, LogOut, Heart, LayoutDashboard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 
 const Navbar = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [isOrganizer, setIsOrganizer] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        const { data: roleData } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .in("role", ["organizer", "admin"])
+          .maybeSingle();
+        
+        setIsOrganizer(!!roleData);
+      }
     });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        const { data: roleData } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", session.user.id)
+          .in("role", ["organizer", "admin"])
+          .maybeSingle();
+        
+        setIsOrganizer(!!roleData);
+      } else {
+        setIsOrganizer(false);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -55,6 +80,14 @@ const Navbar = () => {
                 <Button variant="ghost" asChild>
                   <Link to="/create">Create Event</Link>
                 </Button>
+                {isOrganizer && (
+                  <Button variant="ghost" asChild>
+                    <Link to="/organizer">
+                      <LayoutDashboard className="w-4 h-4 mr-2" />
+                      Organizer
+                    </Link>
+                  </Button>
+                )}
                 <Button variant="ghost" asChild>
                   <Link to="/profile">
                     <User className="w-4 h-4 mr-2" />
