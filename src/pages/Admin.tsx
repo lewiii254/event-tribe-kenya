@@ -38,7 +38,8 @@ const Admin = () => {
 
   useEffect(() => {
     checkAdminAccess();
-  }, [navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const checkAdminAccess = async () => {
     try {
@@ -109,8 +110,8 @@ const Admin = () => {
         toast.error("Failed to load events");
       }
 
-      setUsers(profilesData as User[] || []);
-      setEvents(eventsData as Event[] || []);
+      setUsers(profilesData || []);
+      setEvents(eventsData || []);
     } catch (error) {
       console.error("Error in fetchAdminData:", error);
       toast.error("An error occurred while loading admin data");

@@ -40,14 +40,18 @@ class ErrorBoundary extends Component<Props, State> {
               </p>
             )}
             <Button
-              onClick={() => window.location.href = "/"}
+              onClick={() => {
+                window.location.assign("/");
+              }}
               className="mr-2"
             >
               Go to Home
             </Button>
             <Button
               variant="outline"
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                window.location.reload();
+              }}
             >
               Refresh Page
             </Button>
