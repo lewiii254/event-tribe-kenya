@@ -72,6 +72,9 @@ const Navbar = () => {
                   <Link to="/events">Events</Link>
                 </Button>
                 <Button variant="ghost" asChild>
+                  <Link to="/calendar">Calendar</Link>
+                </Button>
+                <Button variant="ghost" asChild>
                   <Link to="/favorites">Favorites</Link>
                 </Button>
                 <Button variant="ghost" asChild>

@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import OrganizerDashboard from "./pages/OrganizerDashboard";
 import ManageEvent from "./pages/ManageEvent";
 import Admin from "./pages/Admin";
+import EventCalendar from "./pages/EventCalendar";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
           <Route path="/organizer" element={<OrganizerDashboard />} />
           <Route path="/event/:id/manage" element={<ManageEvent />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/calendar" element={<EventCalendar />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
