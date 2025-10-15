@@ -11,11 +11,28 @@ import { Loader2, Shield, Users, Calendar, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+interface User {
+  id: string;
+  username: string;
+  created_at: string;
+  user_roles?: Array<{ role: string }>;
+}
+
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  profiles?: {
+    username: string;
+  };
+  bookings?: Array<{ count: number }>;
+}
+
 const Admin = () => {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [users, setUsers] = useState<any[]>([]);
-  const [events, setEvents] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [roleForm, setRoleForm] = useState({ userId: "", role: "" });
   const navigate = useNavigate();
 
@@ -92,8 +109,8 @@ const Admin = () => {
         toast.error("Failed to load events");
       }
 
-      setUsers(profilesData || []);
-      setEvents(eventsData || []);
+      setUsers(profilesData as User[] || []);
+      setEvents(eventsData as Event[] || []);
     } catch (error) {
       console.error("Error in fetchAdminData:", error);
       toast.error("An error occurred while loading admin data");
