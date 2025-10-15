@@ -14,6 +14,7 @@ import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
 import OrganizerDashboard from "./pages/OrganizerDashboard";
 import ManageEvent from "./pages/ManageEvent";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/profile" element={<Profile />} />
           <Route path="/organizer" element={<OrganizerDashboard />} />
           <Route path="/event/:id/manage" element={<ManageEvent />} />
+          <Route path="/admin" element={<Admin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

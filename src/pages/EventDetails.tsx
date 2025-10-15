@@ -29,8 +29,11 @@ const EventDetails = () => {
   const [userBooking, setUserBooking] = useState<any>(null);
 
   useEffect(() => {
-    checkAuth();
-    fetchEvent();
+    const init = async () => {
+      await checkAuth();
+      await fetchEvent();
+    };
+    init();
   }, [id]);
 
   const checkAuth = async () => {
@@ -61,14 +64,6 @@ const EventDetails = () => {
     setLoading(true);
 
     try {
-      // Track view
-      if (user?.id) {
-        await supabase.from("event_views").insert({
-          event_id: id,
-          user_id: user.id
-        });
-      }
-
       const { data, error } = await supabase
         .from("events")
         .select(`

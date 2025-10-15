@@ -32,15 +32,24 @@ const OrganizerDashboard = () => {
       return;
     }
 
+    // Check if user has organizer or admin role OR has created events
     const { data: roleData } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", session.user.id)
-      .in("role", ["organizer", "admin"])
-      .maybeSingle();
+      .in("role", ["organizer", "admin"]);
 
-    if (!roleData) {
-      toast.error("Access denied. Organizer privileges required.");
+    const { data: eventsData } = await supabase
+      .from("events")
+      .select("id")
+      .eq("organizer_id", session.user.id)
+      .limit(1);
+
+    const hasOrganizerRole = roleData && roleData.length > 0;
+    const hasCreatedEvents = eventsData && eventsData.length > 0;
+
+    if (!hasOrganizerRole && !hasCreatedEvents) {
+      toast.error("Access denied. Create an event first or contact admin for organizer privileges.");
       navigate("/");
       return;
     }
