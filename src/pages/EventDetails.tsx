@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Calendar, MapPin, Users, Share2, Loader2 } from "lucide-react";
+import { Calendar, MapPin, Users, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import techEvent from "@/assets/events/tech-event.jpg";
 import QRTicket from "@/components/QRTicket";
@@ -17,6 +17,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import EventRatings from "@/components/EventRatings";
 import FavoriteButton from "@/components/FavoriteButton";
 import EventCheckIn from "@/components/EventCheckIn";
+import EventWaitlist from "@/components/EventWaitlist";
+import ShareEventDialog from "@/components/ShareEventDialog";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -34,6 +36,27 @@ const EventDetails = () => {
       await fetchEvent();
     };
     init();
+
+    // Subscribe to realtime booking updates
+    const channel = supabase
+      .channel(`event-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'bookings',
+          filter: `event_id=eq.${id}`
+        },
+        () => {
+          fetchEvent();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [id]);
 
   const checkAuth = async () => {
@@ -130,25 +153,6 @@ const EventDetails = () => {
     }
   };
 
-  const handleShare = async () => {
-    const url = window.location.href;
-    
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: event.title,
-          text: `Check out this event: ${event.title}`,
-          url: url,
-        });
-        toast.success("Shared successfully!");
-      } catch (error) {
-        console.log("Share cancelled");
-      }
-    } else {
-      await navigator.clipboard.writeText(url);
-      toast.success("Link copied to clipboard!");
-    }
-  };
 
   if (loading) {
     return (
@@ -167,6 +171,7 @@ const EventDetails = () => {
   const averageRating = event.event_ratings?.length > 0
     ? event.event_ratings.reduce((sum: number, r: any) => sum + r.rating, 0) / event.event_ratings.length
     : 0;
+  const isFull = event.max_attendees && bookingCount >= event.max_attendees;
 
   return (
     <div className="min-h-screen bg-background">
@@ -233,9 +238,7 @@ const EventDetails = () => {
 
                 <div className="flex gap-2">
                   {user && <FavoriteButton eventId={id!} user={user} />}
-                  <Button variant="outline" size="icon" onClick={handleShare}>
-                    <Share2 className="h-4 w-4" />
-                  </Button>
+                  <ShareEventDialog eventTitle={event.title} eventId={id!} />
                 </div>
               </div>
 
@@ -291,72 +294,80 @@ const EventDetails = () => {
             </div>
 
             <div className="lg:col-span-1">
-              <Card className="p-6 sticky top-24">
-                <div className="space-y-6">
-                  {!event.is_free && (
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Price</p>
-                      <p className="text-3xl font-bold">KSh {event.price}</p>
-                    </div>
-                  )}
-
-                  {hasBooked ? (
-                    <div className="space-y-4">
-                      <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg">
-                        <p className="text-sm font-medium text-green-800 dark:text-green-200">
-                          ✓ You're registered for this event
-                        </p>
+              <div className="space-y-4 sticky top-24">
+                <Card className="p-6">
+                  <div className="space-y-6">
+                    {!event.is_free && (
+                      <div>
+                        <p className="text-sm text-muted-foreground mb-1">Price</p>
+                        <p className="text-3xl font-bold">KSh {event.price}</p>
                       </div>
+                    )}
 
-                      {userBooking?.payment_status === "completed" && userBooking?.qr_code && (
-                        <QRTicket
-                          bookingId={userBooking.id}
-                          qrCode={userBooking.qr_code}
-                          eventTitle={event.title}
-                          eventDate={event.date}
-                        />
-                      )}
+                    {hasBooked ? (
+                      <div className="space-y-4">
+                        <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg">
+                          <p className="text-sm font-medium text-green-800 dark:text-green-200">
+                            ✓ You're registered for this event
+                          </p>
+                        </div>
 
-                      {userBooking?.payment_status === "pending" && (
-                        <Button className="w-full" variant="default">
-                          Complete Payment
-                        </Button>
-                      )}
-                    </div>
-                  ) : (
-                    <Button
-                      className="w-full"
-                      size="lg"
-                      onClick={handleBooking}
-                      disabled={booking || (event.max_attendees && bookingCount >= event.max_attendees)}
-                    >
-                      {booking ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Booking...
-                        </>
-                      ) : (
-                        event.is_free ? "Register for Free" : "Book Now"
-                      )}
-                    </Button>
-                  )}
+                        {userBooking?.payment_status === "completed" && userBooking?.qr_code && (
+                          <QRTicket
+                            bookingId={userBooking.id}
+                            qrCode={userBooking.qr_code}
+                            eventTitle={event.title}
+                            eventDate={event.date}
+                          />
+                        )}
 
-                  {event.max_attendees && (
-                    <div>
-                      <div className="flex justify-between text-sm mb-2">
-                        <span>Spots filled</span>
-                        <span>{bookingCount} / {event.max_attendees}</span>
+                        {userBooking?.payment_status === "pending" && (
+                          <Button className="w-full" variant="default">
+                            Complete Payment
+                          </Button>
+                        )}
                       </div>
-                      <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary transition-all"
-                          style={{ width: `${(bookingCount / event.max_attendees) * 100}%` }}
-                        />
+                    ) : (
+                      <Button
+                        className="w-full"
+                        size="lg"
+                        onClick={handleBooking}
+                        disabled={booking || isFull}
+                      >
+                        {booking ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Booking...
+                          </>
+                        ) : isFull ? (
+                          "Event Full"
+                        ) : (
+                          event.is_free ? "Register for Free" : "Book Now"
+                        )}
+                      </Button>
+                    )}
+
+                    {event.max_attendees && (
+                      <div>
+                        <div className="flex justify-between text-sm mb-2">
+                          <span>Spots filled</span>
+                          <span>{bookingCount} / {event.max_attendees}</span>
+                        </div>
+                        <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-primary transition-all"
+                            style={{ width: `${(bookingCount / event.max_attendees) * 100}%` }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </Card>
+                    )}
+                  </div>
+                </Card>
+
+                {isFull && !hasBooked && (
+                  <EventWaitlist eventId={id!} userId={user?.id || null} isFull={isFull} />
+                )}
+              </div>
             </div>
           </div>
         </div>
