@@ -42,8 +42,9 @@ const EventRating = ({ eventId, userId, existingRating, onRatingSubmit }: EventR
 
       toast.success("Rating submitted successfully!");
       onRatingSubmit();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to submit rating");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to submit rating";
+      toast.error(errorMessage);
     } finally {
       setSubmitting(false);
     }

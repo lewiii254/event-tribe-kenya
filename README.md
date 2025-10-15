@@ -344,6 +344,38 @@ VITE_APP_URL=http://localhost:5173
 3. Enable Row Level Security (RLS)
 4. Set up authentication providers
 
+### Deployment
+
+#### Deploying to Vercel
+
+The project includes a `vercel.json` configuration file to handle client-side routing properly. This ensures that page refreshes on routes other than the landing page work correctly.
+
+1. Install Vercel CLI (optional):
+   ```bash
+   npm i -g vercel
+   ```
+
+2. Deploy using Vercel CLI:
+   ```bash
+   vercel
+   ```
+
+3. Or deploy via Vercel Dashboard:
+   - Import your GitHub repository
+   - Vercel will automatically detect the Vite configuration
+   - Add your environment variables in the Vercel dashboard
+   - Deploy!
+
+4. Configure environment variables in Vercel:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+   - `VITE_MPESA_CONSUMER_KEY` (optional)
+   - `VITE_MPESA_CONSUMER_SECRET` (optional)
+   - `VITE_MPESA_SHORTCODE` (optional)
+   - `VITE_APP_URL` (your Vercel deployment URL)
+
+**Note:** The `vercel.json` file ensures all routes are handled by the client-side router, preventing 404 errors on page refresh.
+
 ---
 
 ## 💡 Usage Guide

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,19 @@ interface DiscountCodeManagerProps {
   eventId: string;
 }
 
+interface DiscountCode {
+  id: string;
+  code: string;
+  discount_type: string;
+  discount_value: number;
+  max_uses: number | null;
+  times_used: number;
+  is_active: boolean;
+  created_at: string;
+}
+
 const DiscountCodeManager = ({ eventId }: DiscountCodeManagerProps) => {
-  const [discountCodes, setDiscountCodes] = useState<any[]>([]);
+  const [discountCodes, setDiscountCodes] = useState<DiscountCode[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({
     code: "",
@@ -23,19 +34,19 @@ const DiscountCodeManager = ({ eventId }: DiscountCodeManagerProps) => {
     max_uses: "",
   });
 
-  useEffect(() => {
-    fetchDiscountCodes();
-  }, [eventId]);
-
-  const fetchDiscountCodes = async () => {
+  const fetchDiscountCodes = useCallback(async () => {
     const { data } = await supabase
       .from("discount_codes")
       .select("*")
       .eq("event_id", eventId)
       .order("created_at", { ascending: false });
 
-    setDiscountCodes(data || []);
-  };
+    setDiscountCodes(data as DiscountCode[] || []);
+  }, [eventId]);
+
+  useEffect(() => {
+    fetchDiscountCodes();
+  }, [fetchDiscountCodes]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

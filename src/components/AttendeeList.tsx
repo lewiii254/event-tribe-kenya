@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,10 +8,44 @@ interface AttendeeListProps {
   eventId: string;
 }
 
+interface Attendee {
+  id: string;
+  created_at: string;
+  payment_status: string;
+  profiles: {
+    username: string;
+    avatar_url?: string;
+  } | null;
+}
+
 const AttendeeList = ({ eventId }: AttendeeListProps) => {
-  const [attendees, setAttendees] = useState<any[]>([]);
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const fetchAttendees = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("bookings")
+        .select(`
+          id,
+          created_at,
+          payment_status,
+          profiles:user_id (username, avatar_url)
+        `)
+        .eq("event_id", eventId)
+        .eq("payment_status", "completed")
+        .order("created_at", { ascending: false });
+
+      if (!error && data) {
+        setAttendees(data as Attendee[]);
+      }
+    } catch (error) {
+      console.error("Error fetching attendees:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [eventId]);
 
   useEffect(() => {
     fetchAttendees();
@@ -36,31 +70,7 @@ const AttendeeList = ({ eventId }: AttendeeListProps) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [eventId]);
-
-  const fetchAttendees = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("bookings")
-        .select(`
-          id,
-          created_at,
-          payment_status,
-          profiles:user_id (username, avatar_url)
-        `)
-        .eq("event_id", eventId)
-        .eq("payment_status", "completed")
-        .order("created_at", { ascending: false });
-
-      if (!error && data) {
-        setAttendees(data);
-      }
-    } catch (error) {
-      console.error("Error fetching attendees:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [eventId, fetchAttendees]);
 
   if (loading) return null;
 

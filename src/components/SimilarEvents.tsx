@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, MapPin, Star } from "lucide-react";
@@ -10,15 +10,27 @@ interface SimilarEventsProps {
   category: string;
 }
 
+interface EventRating {
+  rating: number;
+}
+
+interface SimilarEvent {
+  id: string;
+  title: string;
+  category: string;
+  location: string;
+  date: string;
+  price: number;
+  is_free: boolean;
+  image_url: string | null;
+  event_ratings: EventRating[];
+}
+
 const SimilarEvents = ({ currentEventId, category }: SimilarEventsProps) => {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<SimilarEvent[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchSimilarEvents();
-  }, [currentEventId, category]);
-
-  const fetchSimilarEvents = async () => {
+  const fetchSimilarEvents = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from("events")
@@ -33,20 +45,24 @@ const SimilarEvents = ({ currentEventId, category }: SimilarEventsProps) => {
           image_url,
           event_ratings (rating)
         `)
-        .eq("category", category as any)
+        .eq("category", category)
         .neq("id", currentEventId)
         .gte("date", new Date().toISOString())
         .limit(3);
 
       if (!error && data) {
-        setEvents(data);
+        setEvents(data as SimilarEvent[]);
       }
     } catch (error) {
       console.error("Error fetching similar events:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentEventId, category]);
+
+  useEffect(() => {
+    fetchSimilarEvents();
+  }, [fetchSimilarEvents]);
 
   if (loading || events.length === 0) return null;
 
@@ -57,7 +73,7 @@ const SimilarEvents = ({ currentEventId, category }: SimilarEventsProps) => {
         {events.map((event) => {
           const avgRating = event.event_ratings?.length
             ? (
-                event.event_ratings.reduce((sum: number, r: any) => sum + r.rating, 0) /
+                event.event_ratings.reduce((sum: number, r) => sum + r.rating, 0) /
                 event.event_ratings.length
               ).toFixed(1)
             : null;

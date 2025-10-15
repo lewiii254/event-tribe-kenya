@@ -25,7 +25,7 @@ const EventWaitlist = ({ eventId, userId, isFull }: EventWaitlistProps) => {
 
     setLoading(true);
     try {
-      // @ts-ignore - Table exists but types haven't regenerated yet
+      // @ts-expect-error - Table exists but types haven't regenerated yet
       const { error } = await supabase.from("event_waitlist").insert({
         event_id: eventId,
         user_id: userId,
@@ -42,8 +42,9 @@ const EventWaitlist = ({ eventId, userId, isFull }: EventWaitlistProps) => {
         setJoined(true);
         toast.success("You've joined the waitlist! We'll notify you when spots open up.");
       }
-    } catch (error: any) {
-      toast.error(error.message || "Failed to join waitlist");
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to join waitlist";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
