@@ -70,7 +70,7 @@ const EventDetails = () => {
           *,
           profiles:organizer_id (username),
           bookings (count),
-          event_ratings (rating, review)
+          event_ratings (rating, review, created_at, profiles:user_id (username))
         `)
         .eq("id", id)
         .maybeSingle();
