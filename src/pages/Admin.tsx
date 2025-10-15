@@ -21,47 +21,83 @@ const Admin = () => {
 
   useEffect(() => {
     checkAdminAccess();
-  }, []);
+  }, [navigate]);
 
   const checkAdminAccess = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (!session) {
-      navigate("/auth");
-      return;
-    }
+    try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error("Session error:", sessionError);
+        toast.error("Failed to verify session");
+        navigate("/auth");
+        return;
+      }
 
-    const { data: roleData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", session.user.id)
-      .eq("role", "admin")
-      .maybeSingle();
+      if (!session) {
+        toast.error("Please log in to access the admin panel");
+        navigate("/auth");
+        return;
+      }
 
-    if (!roleData) {
-      toast.error("Access denied. Admin privileges required.");
+      const { data: roleData, error: roleError } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+
+      if (roleError) {
+        console.error("Role check error:", roleError);
+        toast.error("Failed to verify admin access");
+        navigate("/");
+        return;
+      }
+
+      if (!roleData) {
+        toast.error("Access denied. Admin privileges required.");
+        navigate("/");
+        return;
+      }
+
+      setIsAdmin(true);
+      await fetchAdminData();
+      setLoading(false);
+    } catch (error) {
+      console.error("Admin access check error:", error);
+      toast.error("An error occurred while checking admin access");
       navigate("/");
-      return;
     }
-
-    setIsAdmin(true);
-    await fetchAdminData();
-    setLoading(false);
   };
 
   const fetchAdminData = async () => {
-    const { data: profilesData } = await supabase
-      .from("profiles")
-      .select("*, user_roles(role)")
-      .order("created_at", { ascending: false });
+    try {
+      const { data: profilesData, error: profilesError } = await supabase
+        .from("profiles")
+        .select("*, user_roles(role)")
+        .order("created_at", { ascending: false });
 
-    const { data: eventsData } = await supabase
-      .from("events")
-      .select("*, profiles:organizer_id(username), bookings(count)")
-      .order("created_at", { ascending: false });
+      if (profilesError) {
+        console.error("Error fetching profiles:", profilesError);
+        toast.error("Failed to load users");
+      }
 
-    setUsers(profilesData || []);
-    setEvents(eventsData || []);
+      const { data: eventsData, error: eventsError } = await supabase
+        .from("events")
+        .select("*, profiles:organizer_id(username), bookings(count)")
+        .order("created_at", { ascending: false });
+
+      if (eventsError) {
+        console.error("Error fetching events:", eventsError);
+        toast.error("Failed to load events");
+      }
+
+      setUsers(profilesData || []);
+      setEvents(eventsData || []);
+    } catch (error) {
+      console.error("Error in fetchAdminData:", error);
+      toast.error("An error occurred while loading admin data");
+    }
   };
 
   const assignRole = async () => {
@@ -70,35 +106,49 @@ const Admin = () => {
       return;
     }
 
-    const { error } = await supabase
-      .from("user_roles")
-      .insert([{ user_id: roleForm.userId, role: roleForm.role as "admin" | "organizer" | "user" }]);
+    try {
+      const { error } = await supabase
+        .from("user_roles")
+        .upsert([{ user_id: roleForm.userId, role: roleForm.role as "admin" | "organizer" | "user" }], {
+          onConflict: 'user_id,role'
+        });
 
-    if (error) {
-      toast.error("Failed to assign role");
-      return;
+      if (error) {
+        console.error("Error assigning role:", error);
+        toast.error("Failed to assign role: " + error.message);
+        return;
+      }
+
+      toast.success("Role assigned successfully");
+      setRoleForm({ userId: "", role: "" });
+      fetchAdminData();
+    } catch (error) {
+      console.error("Error in assignRole:", error);
+      toast.error("An error occurred while assigning role");
     }
-
-    toast.success("Role assigned successfully");
-    setRoleForm({ userId: "", role: "" });
-    fetchAdminData();
   };
 
   const deleteEvent = async (eventId: string) => {
-    if (!confirm("Are you sure you want to delete this event?")) return;
+    if (!confirm("Are you sure you want to delete this event? This action cannot be undone.")) return;
 
-    const { error } = await supabase
-      .from("events")
-      .delete()
-      .eq("id", eventId);
+    try {
+      const { error } = await supabase
+        .from("events")
+        .delete()
+        .eq("id", eventId);
 
-    if (error) {
-      toast.error("Failed to delete event");
-      return;
+      if (error) {
+        console.error("Error deleting event:", error);
+        toast.error("Failed to delete event: " + error.message);
+        return;
+      }
+
+      toast.success("Event deleted successfully");
+      fetchAdminData();
+    } catch (error) {
+      console.error("Error in deleteEvent:", error);
+      toast.error("An error occurred while deleting the event");
     }
-
-    toast.success("Event deleted successfully");
-    fetchAdminData();
   };
 
   if (loading) {
