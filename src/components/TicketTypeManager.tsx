@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,8 +13,19 @@ interface TicketTypeManagerProps {
   eventId: string;
 }
 
+interface TicketType {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  quantity_available: number | null;
+  quantity_sold: number;
+  is_active: boolean;
+  created_at: string;
+}
+
 const TicketTypeManager = ({ eventId }: TicketTypeManagerProps) => {
-  const [ticketTypes, setTicketTypes] = useState<any[]>([]);
+  const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -23,19 +34,19 @@ const TicketTypeManager = ({ eventId }: TicketTypeManagerProps) => {
     quantity_available: "",
   });
 
-  useEffect(() => {
-    fetchTicketTypes();
-  }, [eventId]);
-
-  const fetchTicketTypes = async () => {
+  const fetchTicketTypes = useCallback(async () => {
     const { data } = await supabase
       .from("ticket_types")
       .select("*")
       .eq("event_id", eventId)
       .order("created_at", { ascending: true });
 
-    setTicketTypes(data || []);
-  };
+    setTicketTypes(data as TicketType[] || []);
+  }, [eventId]);
+
+  useEffect(() => {
+    fetchTicketTypes();
+  }, [fetchTicketTypes]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

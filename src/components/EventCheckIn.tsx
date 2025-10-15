@@ -97,13 +97,14 @@ const EventCheckIn = ({ eventId, isOrganizer }: EventCheckInProps) => {
         .eq("id", bookingId);
 
       setQrCode("");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Verification error:", error);
+      const errorMessage = error instanceof Error ? error.message : "Verification failed";
       setVerificationResult({
         valid: false,
-        message: error.message || "Verification failed",
+        message: errorMessage,
       });
-      toast.error(error.message || "Verification failed");
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

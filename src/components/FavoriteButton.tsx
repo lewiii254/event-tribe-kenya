@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,9 @@ import { cn } from "@/lib/utils";
 
 interface FavoriteButtonProps {
   eventId: string;
-  user: any;
+  user: {
+    id: string;
+  } | null;
   className?: string;
 }
 
@@ -15,13 +17,7 @@ const FavoriteButton = ({ eventId, user, className }: FavoriteButtonProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      checkFavorite();
-    }
-  }, [user, eventId]);
-
-  const checkFavorite = async () => {
+  const checkFavorite = useCallback(async () => {
     if (!user) return;
 
     const { data } = await supabase
@@ -32,7 +28,13 @@ const FavoriteButton = ({ eventId, user, className }: FavoriteButtonProps) => {
       .maybeSingle();
 
     setIsFavorite(!!data);
-  };
+  }, [user, eventId]);
+
+  useEffect(() => {
+    if (user) {
+      checkFavorite();
+    }
+  }, [user, eventId, checkFavorite]);
 
   const toggleFavorite = async () => {
     if (!user) {

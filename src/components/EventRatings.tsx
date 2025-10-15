@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,15 +9,52 @@ import { toast } from "sonner";
 
 interface EventRatingsProps {
   eventId: string;
-  user: any;
+  user: {
+    id: string;
+  } | null;
+}
+
+interface Rating {
+  id: string;
+  user_id: string;
+  rating: number;
+  review: string | null;
+  created_at: string;
+  profiles: {
+    username: string;
+  } | null;
 }
 
 const EventRatings = ({ eventId, user }: EventRatingsProps) => {
-  const [ratings, setRatings] = useState<any[]>([]);
+  const [ratings, setRatings] = useState<Rating[]>([]);
   const [userRating, setUserRating] = useState<number>(0);
   const [userReview, setUserReview] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasRated, setHasRated] = useState(false);
+
+  const fetchRatings = useCallback(async () => {
+    const { data } = await supabase
+      .from("event_ratings")
+      .select(`
+        *,
+        profiles (username)
+      `)
+      .eq("event_id", eventId)
+      .order("created_at", { ascending: false });
+
+    if (data) {
+      setRatings(data as Rating[]);
+      
+      if (user) {
+        const existing = data.find((r) => r.user_id === user.id);
+        if (existing) {
+          setHasRated(true);
+          setUserRating(existing.rating);
+          setUserReview(existing.review || "");
+        }
+      }
+    }
+  }, [eventId, user]);
 
   useEffect(() => {
     fetchRatings();
@@ -42,31 +79,7 @@ const EventRatings = ({ eventId, user }: EventRatingsProps) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [eventId, user]);
-
-  const fetchRatings = async () => {
-    const { data } = await supabase
-      .from("event_ratings")
-      .select(`
-        *,
-        profiles (username)
-      `)
-      .eq("event_id", eventId)
-      .order("created_at", { ascending: false });
-
-    if (data) {
-      setRatings(data);
-      
-      if (user) {
-        const existing = data.find((r: any) => r.user_id === user.id);
-        if (existing) {
-          setHasRated(true);
-          setUserRating(existing.rating);
-          setUserReview(existing.review || "");
-        }
-      }
-    }
-  };
+  }, [eventId, user, fetchRatings]);
 
   const handleSubmitRating = async () => {
     if (!user) {

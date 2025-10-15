@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -8,8 +8,32 @@ interface AttendeesListProps {
   eventId: string;
 }
 
+interface Attendee {
+  id: string;
+  profiles: {
+    username: string;
+    avatar_url?: string;
+  } | null;
+}
+
 const AttendeesList = ({ eventId }: AttendeesListProps) => {
-  const [attendees, setAttendees] = useState<any[]>([]);
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
+
+  const fetchAttendees = useCallback(async () => {
+    const { data } = await supabase
+      .from("bookings")
+      .select(`
+        id,
+        profiles (username, avatar_url)
+      `)
+      .eq("event_id", eventId)
+      .eq("payment_status", "completed")
+      .limit(12);
+
+    if (data) {
+      setAttendees(data as Attendee[]);
+    }
+  }, [eventId]);
 
   useEffect(() => {
     fetchAttendees();
@@ -34,23 +58,7 @@ const AttendeesList = ({ eventId }: AttendeesListProps) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [eventId]);
-
-  const fetchAttendees = async () => {
-    const { data } = await supabase
-      .from("bookings")
-      .select(`
-        id,
-        profiles (username, avatar_url)
-      `)
-      .eq("event_id", eventId)
-      .eq("payment_status", "completed")
-      .limit(12);
-
-    if (data) {
-      setAttendees(data);
-    }
-  };
+  }, [eventId, fetchAttendees]);
 
   if (attendees.length === 0) return null;
 

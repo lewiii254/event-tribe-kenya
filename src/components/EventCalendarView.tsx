@@ -6,9 +6,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { MapPin, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+  category: string;
+  image_url?: string;
+  price: number;
+  organizer_id: string;
+}
+
 const EventCalendarView = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [eventDates, setEventDates] = useState<Date[]>([]);
 
   useEffect(() => {
@@ -22,7 +33,7 @@ const EventCalendarView = () => {
       .order("date", { ascending: true });
 
     if (data) {
-      setEvents(data);
+      setEvents(data as Event[]);
       const dates = data.map((event) => new Date(event.date));
       setEventDates(dates);
     }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,25 @@ interface EventFinancesProps {
   eventId: string;
 }
 
+interface Budget {
+  id: string;
+  event_id: string;
+  total_budget: number;
+  total_revenue: number;
+  total_expenses: number;
+}
+
+interface Expense {
+  id: string;
+  category: string;
+  description: string;
+  amount: number;
+  created_at: string;
+}
+
 const EventFinances = ({ eventId }: EventFinancesProps) => {
-  const [budget, setBudget] = useState<any>(null);
-  const [expenses, setExpenses] = useState<any[]>([]);
+  const [budget, setBudget] = useState<Budget | null>(null);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
   const [isAddingExpense, setIsAddingExpense] = useState(false);
   const [formData, setFormData] = useState({
     category: "",
@@ -22,11 +38,7 @@ const EventFinances = ({ eventId }: EventFinancesProps) => {
     amount: "",
   });
 
-  useEffect(() => {
-    fetchFinancialData();
-  }, [eventId]);
-
-  const fetchFinancialData = async () => {
+  const fetchFinancialData = useCallback(async () => {
     const { data: budgetData } = await supabase
       .from("event_budgets")
       .select("*")
@@ -44,7 +56,7 @@ const EventFinances = ({ eventId }: EventFinancesProps) => {
       return;
     }
 
-    setBudget(budgetData);
+    setBudget(budgetData as Budget);
 
     const { data: expensesData } = await supabase
       .from("event_expenses")
@@ -52,8 +64,12 @@ const EventFinances = ({ eventId }: EventFinancesProps) => {
       .eq("event_id", eventId)
       .order("created_at", { ascending: false });
 
-    setExpenses(expensesData || []);
-  };
+    setExpenses(expensesData as Expense[] || []);
+  }, [eventId]);
+
+  useEffect(() => {
+    fetchFinancialData();
+  }, [fetchFinancialData]);
 
   const handleAddExpense = async (e: React.FormEvent) => {
     e.preventDefault();
