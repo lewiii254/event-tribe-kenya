@@ -17,6 +17,10 @@ import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import { Loader2, Upload } from "lucide-react";
 import { User } from "@supabase/supabase-js";
+import { Database } from "@/integrations/supabase/types";
+import { getErrorMessage } from "@/types";
+
+type EventCategory = Database["public"]["Enums"]["event_category"];
 
 const categories = ["Tech", "Music", "Travel", "Parties", "Campus", "Sports", "Art", "Other"];
 
@@ -56,7 +60,7 @@ const CreateEvent = () => {
         organizer_id: user.id,
         title: formData.title,
         description: formData.description,
-        category: formData.category as any,
+        category: formData.category as EventCategory,
         location: formData.location,
         date: new Date(formData.date).toISOString(),
         price: parseFloat(formData.price),
@@ -68,14 +72,14 @@ const CreateEvent = () => {
 
       toast.success("Event created successfully!");
       navigate("/");
-    } catch (error: any) {
-      toast.error(error.message || "Failed to create event");
+    } catch (error) {
+      toast.error(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleChange = (field: string, value: any) => {
+  const handleChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     
     if (field === "isFree") {

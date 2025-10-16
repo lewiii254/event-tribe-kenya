@@ -116,62 +116,6 @@ const EventDetails = () => {
     };
   }, [id, checkAuth, fetchEvent]);
 
-  const checkAuth = useCallback(async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    setUser(session?.user || null);
-    
-    if (session?.user && id) {
-      const { data } = await supabase
-        .from("bookings")
-        .select("*")
-        .eq("event_id", id)
-        .eq("user_id", session.user.id)
-        .maybeSingle();
-      
-      if (data) {
-        setHasBooked(true);
-        setUserBooking(data);
-      }
-    }
-  };
-
-  const fetchEvent = useCallback(async () => {
-    if (!id) {
-      navigate("/");
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from("events")
-        .select(`
-          *,
-          profiles:organizer_id (username),
-          bookings (count),
-          event_ratings (rating, review, created_at, profiles:user_id (username))
-        `)
-        .eq("id", id)
-        .single();
-
-      if (error) {
-        console.error("Error fetching event:", error);
-        toast.error("Event not found");
-        navigate("/");
-        return;
-      }
-
-      setEvent({
-        ...data,
-        image_url: data.image_url || techEvent
-      });
-    } catch (error: any) {
-      console.error("Error:", error);
-      toast.error("Failed to load event");
-      navigate("/");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleBooking = async () => {
     if (!user) {
