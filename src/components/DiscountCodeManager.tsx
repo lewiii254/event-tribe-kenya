@@ -19,7 +19,7 @@ interface DiscountCode {
   discount_type: string;
   discount_value: number;
   max_uses: number | null;
-  times_used: number;
+  current_uses: number;
   is_active: boolean;
   created_at: string;
 }

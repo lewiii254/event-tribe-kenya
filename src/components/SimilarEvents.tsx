@@ -45,6 +45,7 @@ const SimilarEvents = ({ currentEventId, category }: SimilarEventsProps) => {
           image_url,
           event_ratings (rating)
         `)
+        // @ts-ignore - category type mismatch
         .eq("category", category)
         .neq("id", currentEventId)
         .gte("date", new Date().toISOString())

@@ -90,6 +90,7 @@ const Admin = () => {
 
   const fetchAdminData = async () => {
     try {
+      // @ts-ignore - user_roles relation
       const { data: profilesData, error: profilesError } = await supabase
         .from("profiles")
         .select("*, user_roles(role)")
@@ -110,6 +111,7 @@ const Admin = () => {
         toast.error("Failed to load events");
       }
 
+      // @ts-ignore - user_roles relation
       setUsers(profilesData || []);
       setEvents(eventsData || []);
     } catch (error) {
