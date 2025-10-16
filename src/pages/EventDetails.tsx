@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -19,16 +19,75 @@ import FavoriteButton from "@/components/FavoriteButton";
 import EventCheckIn from "@/components/EventCheckIn";
 import EventWaitlist from "@/components/EventWaitlist";
 import ShareEventDialog from "@/components/ShareEventDialog";
+import { Event, Booking, getErrorMessage } from "@/types";
+import { User } from "@supabase/supabase-js";
 
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [event, setEvent] = useState<any>(null);
+  const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [hasBooked, setHasBooked] = useState(false);
-  const [userBooking, setUserBooking] = useState<any>(null);
+  const [userBooking, setUserBooking] = useState<Booking | null>(null);
+
+  const checkAuth = useCallback(async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    setUser(session?.user || null);
+    
+    if (session?.user && id) {
+      const { data } = await supabase
+        .from("bookings")
+        .select("*")
+        .eq("event_id", id)
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+      
+      if (data) {
+        setHasBooked(true);
+        setUserBooking(data);
+      }
+    }
+  }, [id]);
+
+  const fetchEvent = useCallback(async () => {
+    if (!id) {
+      navigate("/");
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from("events")
+        .select(`
+          *,
+          profiles:organizer_id (username),
+          bookings (count),
+          event_ratings (rating, review, created_at, profiles:user_id (username))
+        `)
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("Error fetching event:", error);
+        toast.error("Event not found");
+        navigate("/");
+        return;
+      }
+
+      setEvent({
+        ...data,
+        image_url: data.image_url || techEvent
+      } as Event);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Failed to load event");
+      navigate("/");
+    } finally {
+      setLoading(false);
+    }
+  }, [id, navigate]);
 
   useEffect(() => {
     fetchEvent();
@@ -55,9 +114,9 @@ const EventDetails = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [id]);
+  }, [id, checkAuth, fetchEvent]);
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     setUser(session?.user || null);
     
@@ -76,7 +135,7 @@ const EventDetails = () => {
     }
   };
 
-  const fetchEvent = async () => {
+  const fetchEvent = useCallback(async () => {
     if (!id) {
       navigate("/");
       return;
@@ -137,8 +196,8 @@ const EventDetails = () => {
       // Refresh data
       await checkAuth();
       await fetchEvent();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to book event");
+    } catch (error) {
+      toast.error(getErrorMessage(error));
     } finally {
       setBooking(false);
     }
@@ -159,8 +218,8 @@ const EventDetails = () => {
 
   const isOrganizer = user?.id === event.organizer_id;
   const bookingCount = event.bookings?.[0]?.count || 0;
-  const averageRating = event.event_ratings?.length > 0
-    ? event.event_ratings.reduce((sum: number, r: any) => sum + r.rating, 0) / event.event_ratings.length
+  const averageRating = event.event_ratings?.length
+    ? event.event_ratings.reduce((sum, r) => sum + r.rating, 0) / event.event_ratings.length
     : 0;
   const isFull = event.max_attendees && bookingCount >= event.max_attendees;
 
