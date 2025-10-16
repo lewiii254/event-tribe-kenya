@@ -25,7 +25,7 @@ const EventWaitlist = ({ eventId, userId, isFull }: EventWaitlistProps) => {
 
     setLoading(true);
     try {
-      // @ts-ignore - Table exists but types haven't regenerated yet
+      // @ts-expect-error - Table exists but types haven't regenerated yet
       const { error } = await supabase.from("event_waitlist").insert({
         event_id: eventId,
         user_id: userId,

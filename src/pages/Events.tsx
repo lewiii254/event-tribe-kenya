@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import CategoryFilter from "@/components/CategoryFilter";
 import EventCard from "@/components/EventCard";
@@ -27,41 +27,21 @@ import techEvent from "@/assets/events/tech-event.jpg";
 import musicEvent from "@/assets/events/music-event.jpg";
 import travelEvent from "@/assets/events/travel-event.jpg";
 import partyEvent from "@/assets/events/party-event.jpg";
+import { Event } from "@/types";
+import { Database } from "@/integrations/supabase/types";
+
+type EventCategory = Database["public"]["Enums"]["event_category"];
 
 const Events = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState("date");
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [showFreeOnly, setShowFreeOnly] = useState(false);
 
-  useEffect(() => {
-    fetchEvents();
-
-    // Subscribe to realtime events
-    const channel = supabase
-      .channel('events-all')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'events'
-        },
-        () => {
-          fetchEvents();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [selectedCategory, searchQuery, sortBy, priceRange, showFreeOnly]);
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       let query = supabase
         .from("events")
@@ -72,7 +52,7 @@ const Events = () => {
         `);
 
       if (selectedCategory !== "All") {
-        query = query.eq("category", selectedCategory as any);
+        query = query.eq("category", selectedCategory as EventCategory);
       }
 
       if (searchQuery) {
@@ -112,7 +92,7 @@ const Events = () => {
       let eventsWithImages = (data || []).map((event, idx) => ({
         ...event,
         image_url: event.image_url || eventImages[idx % eventImages.length],
-      }));
+      })) as Event[];
 
       // Client-side sorting for popularity
       if (sortBy === "popularity") {
@@ -129,7 +109,31 @@ const Events = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, searchQuery, sortBy, priceRange, showFreeOnly]);
+
+  useEffect(() => {
+    fetchEvents();
+
+    // Subscribe to realtime events
+    const channel = supabase
+      .channel('events-all')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'events'
+        },
+        () => {
+          fetchEvents();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchEvents]);
 
   return (
     <div className="min-h-screen bg-background">

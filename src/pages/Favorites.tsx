@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import EventCard from "@/components/EventCard";
@@ -7,17 +7,19 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Heart } from "lucide-react";
 import { toast } from "sonner";
+import { Event } from "@/types";
+
+interface FavoriteWithEvent {
+  id: string;
+  events: Event;
+}
 
 const Favorites = () => {
-  const [favorites, setFavorites] = useState<any[]>([]);
+  const [favorites, setFavorites] = useState<FavoriteWithEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
@@ -26,7 +28,11 @@ const Favorites = () => {
     }
 
     fetchFavorites(session.user.id);
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const fetchFavorites = async (userId: string) => {
     try {

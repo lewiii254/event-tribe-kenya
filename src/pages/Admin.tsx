@@ -90,7 +90,7 @@ const Admin = () => {
 
   const fetchAdminData = async () => {
     try {
-      // @ts-ignore - user_roles relation
+      // @ts-expect-error - user_roles relation
       const { data: profilesData, error: profilesError } = await supabase
         .from("profiles")
         .select("*, user_roles(role)")
@@ -111,7 +111,7 @@ const Admin = () => {
         toast.error("Failed to load events");
       }
 
-      // @ts-ignore - user_roles relation
+      // @ts-expect-error - user_roles relation
       setUsers(profilesData || []);
       setEvents(eventsData || []);
     } catch (error) {
@@ -260,7 +260,7 @@ const Admin = () => {
                         <div>
                           <h4 className="font-semibold">{user.username}</h4>
                           <p className="text-sm text-muted-foreground">
-                            {user.user_roles?.map((r: any) => r.role).join(", ") || "No roles"}
+                            {user.user_roles?.map((r: { role: string }) => r.role).join(", ") || "No roles"}
                           </p>
                         </div>
                         <div className="text-sm text-muted-foreground">

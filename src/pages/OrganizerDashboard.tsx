@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, DollarSign, Users, TrendingUp, Plus, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { Event } from "@/types";
 
 const OrganizerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [isOrganizer, setIsOrganizer] = useState(false);
-  const [myEvents, setMyEvents] = useState<any[]>([]);
+  const [myEvents, setMyEvents] = useState<Event[]>([]);
   const [stats, setStats] = useState({
     totalEvents: 0,
     totalBookings: 0,
@@ -20,11 +21,7 @@ const OrganizerDashboard = () => {
   });
   const navigate = useNavigate();
 
-  useEffect(() => {
-    checkOrganizerAccess();
-  }, []);
-
-  const checkOrganizerAccess = async () => {
+  const checkOrganizerAccess = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
@@ -57,7 +54,11 @@ const OrganizerDashboard = () => {
     setIsOrganizer(true);
     await fetchOrganizerData(session.user.id);
     setLoading(false);
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    checkOrganizerAccess();
+  }, [checkOrganizerAccess]);
 
   const fetchOrganizerData = async (userId: string) => {
     const { data: events } = await supabase

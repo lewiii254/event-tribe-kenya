@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -11,19 +11,16 @@ import AttendeeList from "@/components/AttendeeList";
 import TicketTypeManager from "@/components/TicketTypeManager";
 import DiscountCodeManager from "@/components/DiscountCodeManager";
 import EventFinances from "@/components/EventFinances";
+import { Event } from "@/types";
 
 const ManageEvent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [event, setEvent] = useState<any>(null);
+  const [event, setEvent] = useState<Event | null>(null);
   const [isOrganizer, setIsOrganizer] = useState(false);
 
-  useEffect(() => {
-    checkAccess();
-  }, [id]);
-
-  const checkAccess = async () => {
+  const checkAccess = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
@@ -49,10 +46,14 @@ const ManageEvent = () => {
       return;
     }
 
-    setEvent(eventData);
+    setEvent(eventData as Event);
     setIsOrganizer(true);
     setLoading(false);
-  };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    checkAccess();
+  }, [checkAccess]);
 
   if (loading) {
     return (

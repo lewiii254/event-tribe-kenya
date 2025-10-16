@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -19,45 +19,20 @@ import FavoriteButton from "@/components/FavoriteButton";
 import EventCheckIn from "@/components/EventCheckIn";
 import EventWaitlist from "@/components/EventWaitlist";
 import ShareEventDialog from "@/components/ShareEventDialog";
+import { Event, Booking, getErrorMessage } from "@/types";
+import { User } from "@supabase/supabase-js";
 
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [event, setEvent] = useState<any>(null);
+  const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [hasBooked, setHasBooked] = useState(false);
-  const [userBooking, setUserBooking] = useState<any>(null);
+  const [userBooking, setUserBooking] = useState<Booking | null>(null);
 
-  useEffect(() => {
-    fetchEvent();
-    checkAuth();
-
-    // Subscribe to realtime booking updates
-    const channel = supabase
-      .channel(`event-${id}`)
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'bookings',
-          filter: `event_id=eq.${id}`
-        },
-        () => {
-          fetchEvent();
-          checkAuth();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [id]);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     setUser(session?.user || null);
     
@@ -74,9 +49,9 @@ const EventDetails = () => {
         setUserBooking(data);
       }
     }
-  };
+  }, [id]);
 
-  const fetchEvent = async () => {
+  const fetchEvent = useCallback(async () => {
     if (!id) {
       navigate("/");
       return;
@@ -104,15 +79,43 @@ const EventDetails = () => {
       setEvent({
         ...data,
         image_url: data.image_url || techEvent
-      });
-    } catch (error: any) {
+      } as Event);
+    } catch (error) {
       console.error("Error:", error);
       toast.error("Failed to load event");
       navigate("/");
     } finally {
       setLoading(false);
     }
-  };
+  }, [id, navigate]);
+
+  useEffect(() => {
+    fetchEvent();
+    checkAuth();
+
+    // Subscribe to realtime booking updates
+    const channel = supabase
+      .channel(`event-${id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'bookings',
+          filter: `event_id=eq.${id}`
+        },
+        () => {
+          fetchEvent();
+          checkAuth();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [id, checkAuth, fetchEvent]);
+
 
   const handleBooking = async () => {
     if (!user) {
@@ -137,8 +140,8 @@ const EventDetails = () => {
       // Refresh data
       await checkAuth();
       await fetchEvent();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to book event");
+    } catch (error) {
+      toast.error(getErrorMessage(error));
     } finally {
       setBooking(false);
     }
@@ -159,8 +162,8 @@ const EventDetails = () => {
 
   const isOrganizer = user?.id === event.organizer_id;
   const bookingCount = event.bookings?.[0]?.count || 0;
-  const averageRating = event.event_ratings?.length > 0
-    ? event.event_ratings.reduce((sum: number, r: any) => sum + r.rating, 0) / event.event_ratings.length
+  const averageRating = event.event_ratings?.length
+    ? event.event_ratings.reduce((sum, r) => sum + r.rating, 0) / event.event_ratings.length
     : 0;
   const isFull = event.max_attendees && bookingCount >= event.max_attendees;
 

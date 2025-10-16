@@ -12,7 +12,7 @@ serve(async (req) => {
 
     const resultCode = payload.Body?.stkCallback?.ResultCode;
     const bookingId = payload.Body?.stkCallback?.CallbackMetadata?.Item?.find(
-      (item: any) => item.Name === 'AccountReference'
+      (item: { Name: string; Value: string }) => item.Name === 'AccountReference'
     )?.Value;
 
     if (resultCode === 0 && bookingId) {

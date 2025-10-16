@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
@@ -19,20 +19,22 @@ import { Loader2, Calendar, MapPin, Ticket, X } from "lucide-react";
 import { toast } from "sonner";
 import QRTicket from "@/components/QRTicket";
 import techEvent from "@/assets/events/tech-event.jpg";
+import { Booking, Event } from "@/types";
+import { User } from "@supabase/supabase-js";
+
+interface BookingWithEvent extends Booking {
+  events: Event;
+}
 
 const MyBookings = () => {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<BookingWithEvent[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [cancellingBookingId, setCancellingBookingId] = useState<string | null>(null);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
@@ -42,7 +44,11 @@ const MyBookings = () => {
 
     setUser(session.user);
     fetchBookings(session.user.id);
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const fetchBookings = async (userId: string) => {
     try {

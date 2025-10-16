@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
@@ -11,20 +11,22 @@ import techEvent from "@/assets/events/tech-event.jpg";
 import musicEvent from "@/assets/events/music-event.jpg";
 import travelEvent from "@/assets/events/travel-event.jpg";
 import partyEvent from "@/assets/events/party-event.jpg";
+import { Event, Profile } from "@/types";
+import { User } from "@supabase/supabase-js";
+
+interface BookingWithEvent {
+  events: Event;
+}
 
 const Profile = () => {
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
-  const [myEvents, setMyEvents] = useState<any[]>([]);
-  const [bookedEvents, setBookedEvents] = useState<any[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [myEvents, setMyEvents] = useState<Event[]>([]);
+  const [bookedEvents, setBookedEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession();
     
     if (!session) {
@@ -37,7 +39,11 @@ const Profile = () => {
     await fetchMyEvents(session.user.id);
     await fetchBookedEvents(session.user.id);
     setLoading(false);
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const fetchProfile = async (userId: string) => {
     const { data } = await supabase

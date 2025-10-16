@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Sparkles, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { getErrorMessage } from "@/types";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -58,8 +59,8 @@ const Auth = () => {
         toast.success("Account created! You can now sign in.");
         setIsLogin(true);
       }
-    } catch (error: any) {
-      toast.error(error.message || "An error occurred");
+    } catch (error) {
+      toast.error(getErrorMessage(error));
     } finally {
       setLoading(false);
     }

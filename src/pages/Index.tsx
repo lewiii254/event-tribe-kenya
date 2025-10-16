@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import CategoryFilter from "@/components/CategoryFilter";
@@ -9,11 +9,50 @@ import techEvent from "@/assets/events/tech-event.jpg";
 import musicEvent from "@/assets/events/music-event.jpg";
 import travelEvent from "@/assets/events/travel-event.jpg";
 import partyEvent from "@/assets/events/party-event.jpg";
+import { Event } from "@/types";
+import { Database } from "@/integrations/supabase/types";
+
+type EventCategory = Database["public"]["Enums"]["event_category"];
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const fetchEvents = useCallback(async () => {
+    try {
+      setLoading(true);
+      let query = supabase
+        .from("events")
+        .select(`
+          *,
+          profiles:organizer_id (username, avatar_url),
+          bookings (count)
+        `)
+        .order("date", { ascending: true });
+
+      if (selectedCategory !== "All") {
+        query = query.eq("category", selectedCategory as EventCategory);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      // Add sample images to events
+      const eventImages = [techEvent, musicEvent, travelEvent, partyEvent];
+      const eventsWithImages = (data || []).map((event, idx) => ({
+        ...event,
+        image_url: event.image_url || eventImages[idx % eventImages.length],
+      })) as Event[];
+
+      setEvents(eventsWithImages);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedCategory]);
 
   useEffect(() => {
     fetchEvents();
@@ -37,42 +76,7 @@ const Index = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [selectedCategory]);
-
-  const fetchEvents = async () => {
-    try {
-      setLoading(true);
-      let query = supabase
-        .from("events")
-        .select(`
-          *,
-          profiles:organizer_id (username, avatar_url),
-          bookings (count)
-        `)
-        .order("date", { ascending: true });
-
-      if (selectedCategory !== "All") {
-        query = query.eq("category", selectedCategory as any);
-      }
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-
-      // Add sample images to events
-      const eventImages = [techEvent, musicEvent, travelEvent, partyEvent];
-      const eventsWithImages = (data || []).map((event, idx) => ({
-        ...event,
-        image_url: event.image_url || eventImages[idx % eventImages.length],
-      }));
-
-      setEvents(eventsWithImages);
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [fetchEvents]);
 
   return (
     <div className="min-h-screen bg-background">
