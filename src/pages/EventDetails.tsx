@@ -31,11 +31,8 @@ const EventDetails = () => {
   const [userBooking, setUserBooking] = useState<any>(null);
 
   useEffect(() => {
-    const init = async () => {
-      await checkAuth();
-      await fetchEvent();
-    };
-    init();
+    fetchEvent();
+    checkAuth();
 
     // Subscribe to realtime booking updates
     const channel = supabase
@@ -50,6 +47,7 @@ const EventDetails = () => {
         },
         () => {
           fetchEvent();
+          checkAuth();
         }
       )
       .subscribe();
@@ -84,8 +82,6 @@ const EventDetails = () => {
       return;
     }
 
-    setLoading(true);
-
     try {
       const { data, error } = await supabase
         .from("events")
@@ -96,16 +92,10 @@ const EventDetails = () => {
           event_ratings (rating, review, created_at, profiles:user_id (username))
         `)
         .eq("id", id)
-        .maybeSingle();
+        .single();
 
       if (error) {
         console.error("Error fetching event:", error);
-        toast.error("Error loading event");
-        navigate("/");
-        return;
-      }
-
-      if (!data) {
         toast.error("Event not found");
         navigate("/");
         return;
@@ -118,6 +108,7 @@ const EventDetails = () => {
     } catch (error: any) {
       console.error("Error:", error);
       toast.error("Failed to load event");
+      navigate("/");
     } finally {
       setLoading(false);
     }

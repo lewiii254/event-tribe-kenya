@@ -63,7 +63,6 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
-      setLoading(true);
       let query = supabase
         .from("events")
         .select(`
