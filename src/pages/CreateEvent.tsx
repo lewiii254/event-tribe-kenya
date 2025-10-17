@@ -93,16 +93,16 @@ const CreateEvent = () => {
       
       <div className="container mx-auto px-4 pt-24 pb-16">
         <div className="max-w-3xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+          <div className="mb-6 sm:mb-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Create Your Event
             </h1>
-            <p className="text-muted-foreground text-lg">
+            <p className="text-sm sm:text-base md:text-lg text-muted-foreground">
               Share your event with the community
             </p>
           </div>
 
-          <Card className="p-8 shadow-xl">
+          <Card className="p-4 sm:p-6 md:p-8 shadow-xl">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="title">Event Title *</Label>

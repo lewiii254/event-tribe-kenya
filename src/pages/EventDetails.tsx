@@ -178,28 +178,28 @@ const EventDetails = () => {
               <img
                 src={event.image_url}
                 alt={event.title}
-                className="w-full h-96 object-cover rounded-xl shadow-2xl"
+                className="w-full h-64 sm:h-80 md:h-96 object-cover rounded-xl shadow-2xl"
               />
 
-              <div className="mt-6 flex items-start justify-between">
+              <div className="mt-6 flex flex-col sm:flex-row items-start justify-between gap-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Badge variant="secondary" className="text-sm">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                    <Badge variant="secondary" className="text-xs sm:text-sm">
                       {event.category}
                     </Badge>
                     {event.is_free && (
-                      <Badge variant="outline" className="text-sm">
+                      <Badge variant="outline" className="text-xs sm:text-sm">
                         Free
                       </Badge>
                     )}
                   </div>
 
-                  <h1 className="text-4xl font-bold mb-4">{event.title}</h1>
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">{event.title}</h1>
 
-                  <div className="flex flex-col gap-3 text-muted-foreground">
+                  <div className="flex flex-col gap-3 text-sm sm:text-base text-muted-foreground">
                     <div className="flex items-center gap-2">
-                      <Calendar className="w-5 h-5" />
-                      <span>{new Date(event.date).toLocaleDateString('en-US', {
+                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm md:text-base">{new Date(event.date).toLocaleDateString('en-US', {
                         weekday: 'long',
                         year: 'numeric',
                         month: 'long',
@@ -210,15 +210,15 @@ const EventDetails = () => {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-5 h-5" />
-                      <span>{event.location}</span>
+                      <MapPin className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm md:text-base">{event.location}</span>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <Users className="w-5 h-5" />
-                      <span>{bookingCount} attending</span>
+                      <Users className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                      <span className="text-xs sm:text-sm md:text-base">{bookingCount} attending</span>
                       {event.max_attendees && (
-                        <span className="text-sm">• Max {event.max_attendees}</span>
+                        <span className="text-xs sm:text-sm">• Max {event.max_attendees}</span>
                       )}
                     </div>
                   </div>
@@ -230,7 +230,7 @@ const EventDetails = () => {
                   )}
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 w-full sm:w-auto">
                   {user && <FavoriteButton eventId={id!} user={user} />}
                   <ShareEventDialog eventTitle={event.title} eventId={id!} />
                 </div>
@@ -238,20 +238,20 @@ const EventDetails = () => {
 
               <Tabs defaultValue="details" className="mt-8">
                 <TabsList className="grid w-full max-w-md grid-cols-3">
-                  <TabsTrigger value="details">Details</TabsTrigger>
-                  <TabsTrigger value="ratings">Ratings</TabsTrigger>
-                  <TabsTrigger value="attendees">Attendees</TabsTrigger>
+                  <TabsTrigger value="details" className="text-xs sm:text-sm">Details</TabsTrigger>
+                  <TabsTrigger value="ratings" className="text-xs sm:text-sm">Ratings</TabsTrigger>
+                  <TabsTrigger value="attendees" className="text-xs sm:text-sm">Attendees</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="details" className="space-y-6">
-                  <Card className="p-6">
-                    <h2 className="text-2xl font-semibold mb-4">About this event</h2>
-                    <p className="text-muted-foreground whitespace-pre-wrap">{event.description}</p>
+                  <Card className="p-4 sm:p-6">
+                    <h2 className="text-xl sm:text-2xl font-semibold mb-4">About this event</h2>
+                    <p className="text-sm sm:text-base text-muted-foreground whitespace-pre-wrap">{event.description}</p>
                   </Card>
 
-                  <Card className="p-6">
-                    <h3 className="text-xl font-semibold mb-2">Organizer</h3>
-                    <p className="text-muted-foreground">{event.profiles?.username || "Event Organizer"}</p>
+                  <Card className="p-4 sm:p-6">
+                    <h3 className="text-lg sm:text-xl font-semibold mb-2">Organizer</h3>
+                    <p className="text-sm sm:text-base text-muted-foreground">{event.profiles?.username || "Event Organizer"}</p>
                   </Card>
 
                   {isOrganizer && (
