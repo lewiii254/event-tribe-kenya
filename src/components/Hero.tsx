@@ -25,7 +25,7 @@ const Hero = () => {
             <span className="text-sm text-white font-medium">Join Your Tribe Today</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-slide-up leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 animate-slide-up leading-tight px-4">
             Discover Events That
             <br />
             <span className="bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent">
@@ -33,53 +33,53 @@ const Hero = () => {
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-2xl mx-auto animate-fade-in">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-8 sm:mb-12 max-w-2xl mx-auto animate-fade-in px-4">
             Connect with your local community through exciting events, meetups, and experiences in Kenya
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-scale-in">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center animate-scale-in px-4">
             <Button 
               size="lg" 
               asChild
-              className="bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl transition-all text-lg px-8 py-6 rounded-full"
+              className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl transition-all text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full"
             >
               <Link to="/events">
                 Browse Events
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
               </Link>
             </Button>
             <Button 
               size="lg" 
               variant="outline"
               asChild
-              className="border-2 border-white text-white hover:bg-white hover:text-primary transition-all text-lg px-8 py-6 rounded-full"
+              className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-primary transition-all text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full"
             >
               <Link to="/create">Create Event</Link>
             </Button>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 mt-20 max-w-2xl mx-auto">
+          <div className="grid grid-cols-3 gap-4 sm:gap-8 mt-12 sm:mt-20 max-w-2xl mx-auto px-4">
             <div className="text-center animate-fade-in">
               <div className="flex justify-center mb-2">
-                <Calendar className="w-8 h-8 text-white" />
+                <Calendar className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div className="text-3xl font-bold text-white mb-1">500+</div>
-              <div className="text-sm text-white/80">Events</div>
+              <div className="text-xl sm:text-3xl font-bold text-white mb-1">500+</div>
+              <div className="text-xs sm:text-sm text-white/80">Events</div>
             </div>
             <div className="text-center animate-fade-in" style={{ animationDelay: "0.1s" }}>
               <div className="flex justify-center mb-2">
-                <Users className="w-8 h-8 text-white" />
+                <Users className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div className="text-3xl font-bold text-white mb-1">10K+</div>
-              <div className="text-sm text-white/80">Members</div>
+              <div className="text-xl sm:text-3xl font-bold text-white mb-1">10K+</div>
+              <div className="text-xs sm:text-sm text-white/80">Members</div>
             </div>
             <div className="text-center animate-fade-in" style={{ animationDelay: "0.2s" }}>
               <div className="flex justify-center mb-2">
-                <Zap className="w-8 h-8 text-white" />
+                <Zap className="w-5 h-5 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div className="text-3xl font-bold text-white mb-1">20+</div>
-              <div className="text-sm text-white/80">Cities</div>
+              <div className="text-xl sm:text-3xl font-bold text-white mb-1">20+</div>
+              <div className="text-xs sm:text-sm text-white/80">Cities</div>
             </div>
           </div>
         </div>
