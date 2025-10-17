@@ -6,7 +6,7 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![Lovable Cloud](https://img.shields.io/badge/Lovable-Cloud-blueviolet?style=for-the-badge)](https://lovable.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 
@@ -29,7 +29,7 @@
 - [📊 How It Works](#-how-it-works)
 - [🔌 API & Integrations](#-api--integrations)
 - [🎯 Use Cases](#-use-cases)
-- [🌈 Future Enhancements (V2 Roadmap)](#-future-enhancements-v2-roadmap)
+- [🌈 Future Enhancements](#-future-enhancements)
 - [🤝 Contributing](#-contributing)
 - [📝 License](#-license)
 - [💬 Support](#-support)
@@ -38,20 +38,20 @@
 
 ## 🌟 Overview
 
-**EventTribe Kenya** is a modern, feature-rich event management platform designed specifically for the Kenyan market. It connects event organizers with attendees through an intuitive, real-time platform that makes discovering, booking, and managing events effortless.
+**EventTribe Kenya** is a modern, comprehensive event management platform built with cutting-edge web technologies. It connects event organizers with attendees through an intuitive, real-time platform featuring advanced booking, payment processing, analytics, and community engagement tools.
 
 ### 🎯 Mission
 
-To revolutionize event management in Kenya by providing a seamless, technology-driven platform that empowers organizers and delights attendees.
+To revolutionize event management in Kenya by providing a seamless, technology-driven platform that empowers organizers and delights attendees through innovative features and exceptional user experience.
 
 ### ⚡ Why EventTribe Kenya?
 
 - 🚀 **Real-time Everything** - Live booking updates, instant notifications, dynamic capacity tracking
-- 🤖 **AI-Powered Discovery** - Personalized event recommendations based on your interests
-- 💰 **Smart Pricing** - Group discounts, early bird pricing, and flexible payment options
-- 📱 **Mobile-First Design** - Beautiful, responsive UI that works everywhere
-- 🔐 **Enterprise Security** - Row-level security, encrypted data, secure payments
-- 📊 **Powerful Analytics** - Comprehensive dashboards for data-driven decisions
+- 💰 **Smart Pricing** - Multi-tier tickets, discount codes, early bird pricing, group discounts
+- 📱 **Mobile-First Design** - Beautiful, responsive UI optimized for all devices
+- 🔐 **Enterprise Security** - Row-level security, encrypted data, secure M-Pesa payments
+- 📊 **Powerful Analytics** - Comprehensive dashboards with visual charts and insights
+- 🎟️ **Advanced Ticketing** - QR codes, waitlists, multiple ticket types, check-in system
 
 ---
 
@@ -59,77 +59,87 @@ To revolutionize event management in Kenya by providing a seamless, technology-d
 
 ### 👥 For Event Attendees
 
-#### 🔍 Smart Discovery
-- 🎯 **AI-Powered Recommendations** - Get personalized event suggestions based on interests & history
-- 🔎 **Advanced Search & Filters** - Search by category, location, price range, date
-- 📅 **Smart Calendar View** - See events organized by date
-- ⭐ **Favorites List** - Save events for later
-- 🔔 **Waitlist System** - Join waitlist for full events, get notified when spots open
+#### 🔍 Discovery & Browsing
+- 🎯 **Smart Search** - Advanced filtering by category, location, price, and date
+- 📅 **Calendar View** - Visualize events in an organized calendar layout
+- ⭐ **Favorites System** - Save events to your favorites for easy access
+- 🔔 **Waitlist** - Join waitlists for sold-out events and get notified when spots open
+- 🎭 **Category Browsing** - Explore events by category (Music, Tech, Sports, Travel, Party)
 
-#### 🎫 Seamless Booking
-- ⚡ **One-Click Booking** - Quick booking for free events
-- 👥 **Group Discounts** - Save 10% for 5+ tickets, 15% for 10+ tickets
-- 🐦 **Early Bird Pricing** - Access special early rates
-- 📱 **M-Pesa Integration** - Secure, instant mobile payments
-- 🎟️ **Digital QR Tickets** - Easy check-in with QR codes
-- 📲 **Ticket Management** - View, download, and share tickets
+#### 🎫 Booking & Tickets
+- ⚡ **Quick Booking** - Streamlined checkout process for fast reservations
+- 🎟️ **Multiple Ticket Types** - Choose from various ticket tiers and pricing options
+- 💵 **Discount Codes** - Apply promotional codes for special pricing
+- 👥 **Group Discounts** - Automatic discounts for bulk purchases
+- 📱 **M-Pesa Payments** - Secure mobile money integration
+- 🎫 **QR Code Tickets** - Digital tickets with QR codes for easy check-in
+- 💾 **Download Tickets** - Save tickets as PDF or images
 
-#### 🔔 Stay Connected
-- 📆 **Calendar Integration** - Export to Google Calendar, Outlook, iCal
-- ⏰ **Smart Reminders** - Set custom reminders (1 day, 1 hour, 30 min before)
-- 💬 **WhatsApp Notifications** - Get updates via WhatsApp
-- 🌐 **Social Sharing** - Share on Twitter, Facebook, WhatsApp, LinkedIn
-- 📊 **Real-time Updates** - Live notifications for event changes
-
-#### 💬 Community Features
-- ⭐ **Ratings & Reviews** - Rate and review events after attendance
-- 💭 **Event Discussions** - Engage with other attendees
-- 👥 **Attendee Lists** - See who else is going
-- 🤝 **Networking** - Connect with like-minded people
+#### 📱 Engagement Features
+- ⭐ **Ratings & Reviews** - Share your experience and help others decide
+- 💬 **Comments** - Engage with other attendees in event discussions
+- 👍 **Event Likes** - Show appreciation for events you love
+- 📤 **Social Sharing** - Share events on Twitter, Facebook, WhatsApp, LinkedIn
+- 📅 **Calendar Export** - Add to Google Calendar, Outlook, or download iCal
 
 ### 🎪 For Event Organizers
 
-#### 📊 Comprehensive Analytics
-- 📈 **Performance Dashboard** - Track views, bookings, shares, engagement
-- 📉 **Visual Charts** - Beautiful line & bar charts for trend analysis
-- 🎯 **Conversion Metrics** - Monitor booking conversion rates
-- 📅 **Daily Tracking** - Performance over time insights
-- 💹 **Revenue Analytics** - Track earnings and payment status
+#### 📊 Analytics Dashboard
+- 📈 **Performance Metrics** - Track views, bookings, revenue, and engagement
+- 📉 **Visual Charts** - Line and bar charts for trend analysis (powered by Recharts)
+- 🎯 **Conversion Tracking** - Monitor booking conversion rates
+- 📅 **Timeline Analysis** - View performance over custom date ranges
+- 💰 **Revenue Insights** - Track earnings and payment status breakdown
 
-#### 🎛️ Advanced Event Management
-- ✅ **QR Check-in System** - Fast ticket verification with QR scanner
-- 👥 **Capacity Management** - Set limits, monitor in real-time
-- 💰 **Flexible Pricing** - Free, paid, early bird, group discounts
-- 📋 **Attendee Management** - View and manage participants
-- 🎫 **Ticket Tiers** - Create multiple ticket categories
+#### 🎛️ Event Management
+- ✅ **QR Check-in** - Fast attendee verification with QR scanner
+- 👥 **Attendee Lists** - View and manage all registered participants
+- 💰 **Financial Tracking** - Budget management with revenue and expense tracking
+- 📋 **Capacity Management** - Set limits and monitor real-time availability
+- 🎫 **Ticket Types** - Create multiple ticket tiers with different pricing
+- 💸 **Discount Codes** - Generate and manage promotional codes
+- 📊 **Waitlist Management** - View and notify waitlisted users
 
-#### 💸 Revenue Optimization
-- 🐦 **Early Bird Pricing** - Create urgency with time-limited discounts
-- 👥 **Group Incentives** - Automatic discount tiers for larger bookings
-- 💳 **Payment Tracking** - Complete M-Pesa integration with status monitoring
-- 📊 **Booking Insights** - Understand your audience better
+#### 💸 Pricing & Discounts
+- 🎟️ **Multi-tier Tickets** - Create different ticket types (VIP, Regular, Early Bird)
+- 🏷️ **Discount Codes** - Set up percentage or fixed amount discounts
+- ⏰ **Time-based Pricing** - Configure valid date ranges for discounts
+- 🔢 **Usage Limits** - Control how many times codes can be used
+- 👥 **Group Discounts** - Automatic discounts for bulk bookings
+
+### 🔐 Admin Features
+
+#### 👨‍💼 User Management
+- 👥 **Role Assignment** - Assign admin, organizer, or user roles
+- 📋 **User Oversight** - View all users and their assigned roles
+- 🔒 **Access Control** - Row-level security with role-based permissions
+
+#### 🎪 Event Moderation
+- 👁️ **Event Oversight** - View all events across the platform
+- 🗑️ **Event Management** - Delete events that violate policies
+- 📊 **Platform Analytics** - Monitor overall platform health and metrics
 
 ---
 
 ## 🏗️ Architecture
 
-### System Architecture Diagram
+### System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         CLIENT LAYER                             │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
 │  │   Web App    │  │  Mobile PWA  │  │  Admin Panel │          │
-│  │  (React/TS)  │  │ (Responsive) │  │  (Organizer) │          │
+│  │  (React/TS)  │  │ (Responsive) │  │  Dashboard   │          │
 │  └──────────────┘  └──────────────┘  └──────────────┘          │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                      API & INTEGRATION LAYER                     │
+│                  API & INTEGRATION LAYER                         │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │   Supabase   │  │   M-Pesa     │  │  Calendar    │          │
-│  │     API      │  │  Payment API │  │   Services   │          │
+│  │   Lovable    │  │   M-Pesa     │  │  Calendar    │          │
+│  │    Cloud     │  │  Payment API │  │   Services   │          │
 │  └──────────────┘  └──────────────┘  └──────────────┘          │
 └─────────────────────────────────────────────────────────────────┘
                               │
@@ -137,8 +147,8 @@ To revolutionize event management in Kenya by providing a seamless, technology-d
 ┌─────────────────────────────────────────────────────────────────┐
 │                       BUSINESS LOGIC LAYER                       │
 │  ┌──────────────────────────────────────────────────────┐       │
-│  │  Real-time Event Updates │ AI Recommendations │ ...  │       │
-│  │  Booking Management │ Analytics │ Notifications      │       │
+│  │  Real-time Updates │ Booking Management │ Analytics │       │
+│  │  Payment Processing │ Notifications │ Security      │       │
 │  └──────────────────────────────────────────────────────┘       │
 └─────────────────────────────────────────────────────────────────┘
                               │
@@ -146,121 +156,83 @@ To revolutionize event management in Kenya by providing a seamless, technology-d
 ┌─────────────────────────────────────────────────────────────────┐
 │                         DATA LAYER                               │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │  PostgreSQL  │  │  File Storage│  │  Real-time   │          │
-│  │   Database   │  │   (Images)   │  │  Subscriptions│         │
+│  │  PostgreSQL  │  │  Real-time   │  │  Edge        │          │
+│  │   Database   │  │  Subscriptions│  │  Functions   │          │
 │  └──────────────┘  └──────────────┘  └──────────────┘          │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Data Flow Diagram
+### Database Schema
 
-```
-┌─────────────┐
-│   Attendee  │
-└──────┬──────┘
-       │
-       │ 1. Browse Events
-       ▼
-┌─────────────────────┐
-│  Event Discovery    │◄──── AI Recommendations
-│  (Search, Filter)   │
-└──────┬──────────────┘
-       │
-       │ 2. Select Event
-       ▼
-┌─────────────────────┐
-│  Event Details      │◄──── Real-time Updates
-│  (Info, Reviews)    │
-└──────┬──────────────┘
-       │
-       │ 3. Book Tickets
-       ▼
-┌─────────────────────┐
-│  Booking Process    │
-│  (Group/Individual) │
-└──────┬──────────────┘
-       │
-       │ 4. Payment
-       ▼
-┌─────────────────────┐
-│  M-Pesa Payment     │───── Transaction Verification
-└──────┬──────────────┘
-       │
-       │ 5. Confirmation
-       ▼
-┌─────────────────────┐
-│  QR Ticket          │◄──── Email/WhatsApp Delivery
-│  Generation         │
-└──────┬──────────────┘
-       │
-       │ 6. Event Day
-       ▼
-┌─────────────────────┐
-│  QR Check-in        │───── Organizer Verification
-└─────────────────────┘
-```
+#### Core Tables
+- **events** - Event information, pricing, capacity, organizer details
+- **bookings** - Ticket purchases with payment status and QR codes
+- **profiles** - User profiles with username and bio
+- **user_roles** - Role-based access control (admin, organizer, user)
 
-### Real-time Features Flow
+#### Engagement Tables
+- **event_ratings** - User ratings and reviews
+- **comments** - Event discussions
+- **event_likes** - Event appreciation tracking
+- **event_favorites** - Saved events per user
+- **event_views** - View count analytics
+- **event_waitlist** - Waitlist management for full events
 
-```
-Event Created
-    │
-    ▼
-┌─────────────────────────────┐
-│  Supabase Realtime          │
-│  (WebSocket Connection)     │
-└─────────────────────────────┘
-    │
-    ├─► User Booking ─────► Live Capacity Update ─────► All Connected Clients
-    │
-    ├─► Event Update ─────► Push Notification ────────► Subscribed Users
-    │
-    ├─► Comment Added ───► Discussion Update ─────────► Event Attendees
-    │
-    └─► Waitlist Open ────► Alert Notification ───────► Waitlisted Users
-```
+#### Ticketing & Pricing
+- **ticket_types** - Multiple ticket tiers per event
+- **discount_codes** - Promotional codes with usage limits
+- **seating_charts** - Venue layout configurations
+- **seats** - Individual seat management
+
+#### Financial Management
+- **event_budgets** - Budget tracking (revenue vs expenses)
+- **event_expenses** - Expense categorization and tracking
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- ⚛️ **React 18** - Modern UI library with hooks
-- 📘 **TypeScript** - Type-safe development
-- ⚡ **Vite** - Lightning-fast build tool
+- ⚛️ **React 18** - Modern UI library with hooks and concurrent features
+- 📘 **TypeScript** - Type-safe development with full IDE support
+- ⚡ **Vite** - Lightning-fast build tool and dev server
 - 🎨 **Tailwind CSS** - Utility-first CSS framework
 - 🧩 **shadcn/ui** - Beautiful, accessible component library
-- 📊 **Recharts** - Powerful charting library
+- 📊 **Recharts** - Composable charting library
+- 🔄 **TanStack Query** - Powerful async state management
+- 🎯 **React Hook Form** - Performant form handling
+- 🎨 **Lucide React** - Beautiful icon library
 
-### Backend & Infrastructure
-- 🗄️ **Supabase** - Backend-as-a-Service platform
+### Backend & Cloud
+- ☁️ **Lovable Cloud** - Full-stack cloud platform (Supabase-powered)
   - PostgreSQL Database
   - Authentication & Authorization
   - Real-time Subscriptions
   - Row Level Security (RLS)
-  - File Storage
+  - Edge Functions (Deno)
+  - Secrets Management
 - 🔐 **Row Level Security** - Database-level access control
-- 🌐 **RESTful API** - Supabase Auto-generated APIs
+- 🌐 **RESTful API** - Auto-generated from database schema
 
-### State Management & Data Fetching
-- 🔄 **TanStack Query (React Query)** - Powerful async state management
-- 🪝 **React Hooks** - Built-in state management
-- 📡 **Supabase Realtime** - Live data synchronization
-
-### Payment Integration
+### Payment & Integrations
 - 💰 **M-Pesa API** - Mobile money payment gateway
-- 🔒 **Secure Payment Processing** - PCI compliant transactions
+  - STK Push for payment initiation
+  - Callback handling for verification
+  - Transaction status tracking
+- 📅 **Calendar Integration** - Google Calendar, Outlook, iCal export
+- 📱 **Social Sharing** - Twitter, Facebook, WhatsApp, LinkedIn
 
 ### Development Tools
 - 📦 **npm/bun** - Package management
-- 🔍 **ESLint** - Code linting
-- 🎯 **TypeScript ESLint** - TypeScript-specific linting
+- 🔍 **ESLint** - Code linting and quality
+- 🎯 **TypeScript ESLint** - TypeScript-specific rules
 - 🔧 **PostCSS** - CSS processing
 
-### Deployment & Hosting
+### Deployment
 - 🚀 **Lovable Platform** - One-click deployment
-- 🌐 **Custom Domain Support** - Connect your own domain
-- 📈 **Auto-scaling** - Handle traffic spikes
+- 🌐 **Custom Domains** - Connect your own domain
+- 📈 **Auto-scaling** - Automatic traffic handling
+- ⚡ **Edge Functions** - Serverless logic at the edge
 
 ---
 
@@ -268,20 +240,19 @@ Event Created
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
-
-- 📦 **Node.js** (v18 or higher) - [Download](https://nodejs.org/)
-- 📥 **npm** or **bun** - Package manager
-- 🔑 **Supabase Account** - [Sign up](https://supabase.com/)
-- 💳 **M-Pesa Developer Account** (optional) - For payment testing
+- 📦 **Node.js** (v18 or higher)
+- 📥 **npm** or **bun** package manager
+- 🔑 **Lovable Account** (for Cloud features)
+- 💳 **M-Pesa Developer Account** (optional, for payment testing)
 
 ### Installation
 
 #### Method 1: Using Lovable (Recommended)
 
 1. Visit the [Lovable Project](https://lovable.dev/projects/718058d7-e10f-49b4-baae-566d0765853c)
-2. Start prompting to make changes
-3. Changes are automatically committed to this repo
+2. Fork or remix the project
+3. Start customizing via prompts
+4. Deploy with one click
 
 #### Method 2: Local Development
 
@@ -299,7 +270,7 @@ bun install
 
 # 4. Set up environment variables
 cp .env.example .env
-# Edit .env with your Supabase credentials
+# Edit .env with your configuration
 
 # 5. Start development server
 npm run dev
@@ -310,127 +281,91 @@ bun run dev
 # Visit http://localhost:5173
 ```
 
-#### Method 3: GitHub Codespaces
+### Environment Setup
 
-1. Go to the repository on GitHub
-2. Click the green "Code" button
-3. Select "Codespaces" tab
-4. Click "New codespace"
-5. Wait for environment to load
-6. Run `npm install && npm run dev`
-
-### Environment Variables
-
-Create a `.env` file in the root directory:
+The project uses Lovable Cloud, so most configuration is automatic. However, for M-Pesa integration, you'll need:
 
 ```env
-# Supabase Configuration
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-
 # M-Pesa Configuration (Optional)
-VITE_MPESA_CONSUMER_KEY=your_consumer_key
-VITE_MPESA_CONSUMER_SECRET=your_consumer_secret
-VITE_MPESA_SHORTCODE=your_shortcode
-
-# Application Configuration
-VITE_APP_URL=http://localhost:5173
+MPESA_CONSUMER_KEY=your_consumer_key
+MPESA_CONSUMER_SECRET=your_consumer_secret
+MPESA_BUSINESS_SHORTCODE=your_shortcode
+MPESA_PASSKEY=your_passkey
 ```
 
 ### Database Setup
 
-1. Create a new Supabase project
-2. Run the SQL migrations in `supabase/migrations`
-3. Enable Row Level Security (RLS)
-4. Set up authentication providers
-
-### Deployment
-
-#### Deploying to Vercel
-
-The project includes a `vercel.json` configuration file to handle client-side routing properly. This ensures that page refreshes on routes other than the landing page work correctly.
-
-1. Install Vercel CLI (optional):
-   ```bash
-   npm i -g vercel
-   ```
-
-2. Deploy using Vercel CLI:
-   ```bash
-   vercel
-   ```
-
-3. Or deploy via Vercel Dashboard:
-   - Import your GitHub repository
-   - Vercel will automatically detect the Vite configuration
-   - Add your environment variables in the Vercel dashboard
-   - Deploy!
-
-4. Configure environment variables in Vercel:
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-   - `VITE_MPESA_CONSUMER_KEY` (optional)
-   - `VITE_MPESA_CONSUMER_SECRET` (optional)
-   - `VITE_MPESA_SHORTCODE` (optional)
-   - `VITE_APP_URL` (your Vercel deployment URL)
-
-**Note:** The `vercel.json` file ensures all routes are handled by the client-side router, preventing 404 errors on page refresh.
+The database is automatically provisioned via Lovable Cloud with:
+- ✅ All tables and relationships
+- ✅ Row Level Security policies
+- ✅ Database functions and triggers
+- ✅ Realtime subscriptions enabled
 
 ---
 
 ## 💡 Usage Guide
 
-### For Event Attendees
+### For Attendees
 
-#### 1. **Discovering Events**
+#### Discovering Events
+1. Browse homepage for featured events
+2. Use category filters (Music, Tech, Sports, etc.)
+3. Search by keyword or location
+4. View calendar for date-based browsing
+5. Save favorites for quick access
 
-```
-Home Page → Browse Events → Use Filters (Category, Price, Date)
-                          → Search by keyword
-                          → View AI Recommendations
-```
+#### Booking Tickets
+1. Click on event card to view details
+2. Select ticket type and quantity
+3. Apply discount code if available
+4. Choose M-Pesa for payment (or free booking)
+5. Receive QR ticket via email/download
 
-#### 2. **Booking an Event**
+#### Managing Bookings
+1. Navigate to "My Bookings"
+2. View all purchased tickets
+3. Download QR codes
+4. Check event details and updates
+5. Add to calendar or set reminders
 
-```
-Event Details → Select Ticket Quantity → Apply Group Discount (if eligible)
-             → Choose Payment Method → Confirm Booking
-             → Receive QR Ticket (Email/WhatsApp)
-```
+### For Organizers
 
-#### 3. **Managing Bookings**
+#### Creating Events
+1. Click "Create Event" from dashboard
+2. Fill in event details (title, description, location)
+3. Set date, time, and capacity
+4. Upload event image
+5. Configure pricing and ticket types
+6. Publish event
 
-```
-My Bookings → View All Tickets → Download QR Code
-           → Cancel Booking → Request Refund
-           → Set Reminders → Add to Calendar
-```
+#### Managing Events
+1. Access "Organizer Dashboard"
+2. View all your events
+3. Monitor analytics (views, bookings, revenue)
+4. Check in attendees via QR scanner
+5. Track finances and budgets
+6. Manage waitlists and notify users
 
-### For Event Organizers
+#### Analytics & Insights
+1. Select event from dashboard
+2. View performance charts
+3. Track daily/weekly trends
+4. Monitor payment status
+5. Export attendee lists
 
-#### 1. **Creating an Event**
+### For Admins
 
-```
-Dashboard → Create Event → Fill Event Details
-         → Set Capacity & Pricing → Configure Discounts
-         → Upload Images → Publish Event
-```
+#### User Management
+1. Access "Admin Panel"
+2. View all users and roles
+3. Assign roles (admin, organizer, user)
+4. Monitor user activity
 
-#### 2. **Managing Events**
-
-```
-My Events → Select Event → View Analytics
-         → Check-in Attendees (QR Scanner)
-         → Update Event Details → Monitor Bookings
-```
-
-#### 3. **Analytics & Insights**
-
-```
-Event Analytics → View Performance Metrics
-               → Track Revenue → Export Reports
-               → Monitor Conversion Rates
-```
+#### Platform Oversight
+1. View all events across platform
+2. Moderate content if needed
+3. Delete inappropriate events
+4. Monitor platform health
 
 ---
 
@@ -438,70 +373,56 @@ Event Analytics → View Performance Metrics
 
 ### Booking Flow
 
-```mermaid
-graph TD
-    A[User Selects Event] --> B{Event Available?}
-    B -->|Yes| C[Select Ticket Quantity]
-    B -->|No| D[Join Waitlist]
-    C --> E{Group Booking?}
-    E -->|Yes| F[Apply Group Discount]
-    E -->|No| G[Individual Price]
-    F --> H[Proceed to Payment]
-    G --> H
-    H --> I{Payment Method}
-    I -->|M-Pesa| J[Mobile Payment]
-    I -->|Free| K[Instant Booking]
-    J --> L[Payment Verification]
-    L --> M[Generate QR Ticket]
-    K --> M
-    M --> N[Send Confirmation]
-    N --> O[Email & WhatsApp Delivery]
+```
+User Browses Events
+       ↓
+Selects Event & Ticket Type
+       ↓
+Applies Discount Code (optional)
+       ↓
+Initiates M-Pesa Payment / Free Booking
+       ↓
+Payment Verified
+       ↓
+QR Ticket Generated
+       ↓
+Confirmation Sent (Email/SMS)
+       ↓
+Event Day → QR Check-in
 ```
 
-### Real-time Updates System
+### Real-time Updates
 
-1. **Event Creation** → Database Insert → Realtime Broadcast
-2. **Booking Made** → Capacity Update → Live UI Refresh → Notifications
-3. **Event Modified** → Change Detection → Push to Subscribers → UI Update
-4. **Waitlist Available** → Spot Opens → Alert Users → Auto-booking Option
+1. **Event Creation** → Database insert → Real-time broadcast to all clients
+2. **Booking Made** → Capacity update → Live UI refresh → Organizer notification
+3. **Event Modified** → Change detection → Push to subscribers → UI update
+4. **Waitlist Spot Opens** → Alert users → Auto-notification → Booking opportunity
 
-### AI Recommendation Engine
+### Payment Processing
 
-```
-User Profile → Interests & History → ML Algorithm → Personalized Suggestions
-                                   → Category Matching
-                                   → Location Proximity
-                                   → Price Preferences
-                                   → Social Connections
-```
+1. User initiates booking → M-Pesa STK Push triggered
+2. User enters M-Pesa PIN on phone
+3. Payment processed → Callback received
+4. Booking confirmed → QR ticket generated
+5. Confirmation sent → Email/SMS delivery
 
 ---
 
 ## 🔌 API & Integrations
 
-### Supabase API
+### Lovable Cloud API
 
-#### Authentication
 ```typescript
-// Sign up
-const { user, error } = await supabase.auth.signUp({
+// Authentication
+const { user } = await supabase.auth.signUp({
   email: 'user@example.com',
-  password: 'password'
+  password: 'secure_password'
 })
 
-// Sign in
-const { user, error } = await supabase.auth.signInWithPassword({
-  email: 'user@example.com',
-  password: 'password'
-})
-```
-
-#### Events
-```typescript
 // Fetch events
 const { data: events } = await supabase
   .from('events')
-  .select('*')
+  .select('*, profiles(username), bookings(count)')
   .order('date', { ascending: true })
 
 // Create booking
@@ -510,31 +431,18 @@ const { data: booking } = await supabase
   .insert({
     event_id: eventId,
     user_id: userId,
-    quantity: 2
+    ticket_type_id: ticketTypeId,
+    final_price: calculatedPrice
   })
 ```
 
-#### Real-time Subscriptions
-```typescript
-// Subscribe to booking changes
-const subscription = supabase
-  .channel('bookings')
-  .on('postgres_changes', {
-    event: 'INSERT',
-    schema: 'public',
-    table: 'bookings'
-  }, (payload) => {
-    console.log('New booking:', payload)
-  })
-  .subscribe()
-```
-
-### M-Pesa Integration
+### M-Pesa Edge Function
 
 ```typescript
 // Initiate STK Push
-const response = await fetch('/api/mpesa/stkpush', {
+const response = await fetch('/functions/v1/mpesa-payment', {
   method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
     phoneNumber: '254712345678',
     amount: 1000,
@@ -543,23 +451,21 @@ const response = await fetch('/api/mpesa/stkpush', {
 })
 ```
 
-### Calendar Export
+### Real-time Subscriptions
 
 ```typescript
-// Export to Google Calendar
-const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${eventTitle}&dates=${startDate}/${endDate}`
-
-// Generate iCal file
-const icalContent = `BEGIN:VCALENDAR
-VERSION:2.0
-BEGIN:VEVENT
-SUMMARY:${eventTitle}
-DTSTART:${startDate}
-DTEND:${endDate}
-LOCATION:${location}
-DESCRIPTION:${description}
-END:VEVENT
-END:VCALENDAR`
+// Subscribe to booking updates
+const channel = supabase
+  .channel('bookings')
+  .on('postgres_changes', {
+    event: 'INSERT',
+    schema: 'public',
+    table: 'bookings'
+  }, (payload) => {
+    // Update UI with new booking
+    console.log('New booking:', payload)
+  })
+  .subscribe()
 ```
 
 ---
@@ -567,355 +473,127 @@ END:VCALENDAR`
 ## 🎯 Use Cases
 
 ### 🎤 Tech Conferences
-- ✅ High capacity management (1000+ attendees)
-- ✅ Early bird pricing for sponsors
-- ✅ Analytics for ROI tracking
-- ✅ Group bookings for teams
+- High capacity management (1000+ attendees)
+- Multiple ticket tiers (Early Bird, VIP, Regular)
+- Group discounts for teams
+- Analytics for sponsor ROI
 
 ### 🎵 Music Festivals
-- ✅ Social sharing for viral reach
-- ✅ Real-time capacity updates
-- ✅ QR code fast check-in
-- ✅ Waitlist for sold-out shows
+- Social sharing for viral reach
+- Real-time capacity updates
+- Fast QR check-in
+- Waitlist for sold-out shows
 
 ### 🎓 Campus Events
-- ✅ Free event support
-- ✅ Group discounts for student clubs
-- ✅ Calendar integration for schedules
-- ✅ WhatsApp notifications
+- Free event support
+- Student group discounts
+- Calendar integration
+- Budget tracking for clubs
 
 ### 💼 Corporate Events
-- ✅ Professional analytics
-- ✅ Multi-organizer support
-- ✅ Custom pricing tiers
-- ✅ Secure payment processing
+- Professional analytics dashboards
+- Expense tracking
+- Custom pricing tiers
+- Secure payment processing
 
 ### 🎨 Art Exhibitions
-- ✅ Limited capacity management
-- ✅ Timed entry slots
-- ✅ Member pricing tiers
-- ✅ Gallery location mapping
-
-### 🏃 Sports Events
-- ✅ Team registration
-- ✅ Real-time leaderboards
-- ✅ Participant tracking
-- ✅ Result notifications
+- Limited capacity management
+- Timed entry slots
+- Member pricing
+- Gallery location mapping
 
 ---
 
-## 🌈 Future Enhancements (V2 Roadmap)
+## 🌈 Future Enhancements
 
-### 🚀 Coming Soon (Q1-Q2 2026)
+### 🚀 Planned Features
 
-#### 📱 Mobile Applications
-- [ ] **iOS Native App** - Swift/SwiftUI implementation
-- [ ] **Android Native App** - Kotlin/Jetpack Compose
-- [ ] **Offline Mode** - Cache events for offline viewing
-- [ ] **Push Notifications** - Native mobile notifications
-- [ ] **Biometric Auth** - Face ID / Fingerprint login
-
-#### 🎥 Live Streaming
-- [ ] **Virtual Events** - Host online-only events
-- [ ] **Hybrid Events** - Combine in-person + virtual
-- [ ] **Live Chat** - Real-time audience engagement
-- [ ] **Recording Library** - Access past event recordings
-- [ ] **Multi-camera Streaming** - Professional broadcasting
-
-#### 🎨 Enhanced UX
-- [ ] **Dark Mode** - Complete dark theme support
-- [ ] **Multi-language Support** - Swahili, English, more languages
-- [ ] **Accessibility Improvements** - WCAG 2.1 AAA compliance
-- [ ] **Custom Themes** - Organizer-branded event pages
-- [ ] **Advanced Animations** - Smooth, delightful interactions
-
-### 🔮 Under Consideration (Q3-Q4 2026)
-
-#### 🎫 NFT Tickets
-- [ ] **Blockchain Tickets** - Immutable, transferable tickets
-- [ ] **Collectible Badges** - Limited edition event NFTs
-- [ ] **Resale Marketplace** - P2P ticket exchange
-- [ ] **Proof of Attendance** - Verifiable attendance records
-
-#### 🤝 Networking Features
-- [ ] **Attendee Matching** - AI-powered networking
-- [ ] **In-app Messaging** - Direct communication
-- [ ] **Business Card Exchange** - Digital card swapping
-- [ ] **Meeting Scheduler** - Schedule 1-on-1s at events
-- [ ] **Community Building** - Event-specific forums
-
-#### 🎮 Gamification
-- [ ] **Event Badges** - Achievement system
-- [ ] **Leaderboards** - Top attendees/organizers
-- [ ] **Points & Rewards** - Loyalty program
-- [ ] **Challenges** - Event scavenger hunts
-- [ ] **Social Competitions** - Engagement contests
-
-#### 📊 Advanced Analytics
-- [ ] **Predictive Analytics** - Forecast event success
-- [ ] **Sentiment Analysis** - Review sentiment tracking
-- [ ] **Heatmaps** - Venue utilization mapping
-- [ ] **Custom Reports** - Build your own reports
-- [ ] **Export to BI Tools** - PowerBI, Tableau integration
-
-#### 💼 Enterprise Features
-- [ ] **White Label Solution** - Fully branded platform
-- [ ] **Multi-tenant Architecture** - Organization workspaces
-- [ ] **Advanced Permissions** - Role-based access control
-- [ ] **API Access** - RESTful API for integrations
-- [ ] **Webhook Support** - Real-time event notifications
-- [ ] **SSO Integration** - Enterprise authentication
-- [ ] **Bulk Operations** - Manage multiple events at scale
-
-#### 🛍️ Commerce Features
-- [ ] **Merchandise Sales** - Sell event merch
-- [ ] **Concession Management** - Food & beverage sales
-- [ ] **Sponsor Management** - Sponsor tier management
+#### Q1-Q2 2026
+- [ ] **Mobile Apps** - Native iOS and Android apps
+- [ ] **Multi-language Support** - Swahili, English, French
+- [ ] **Dark Mode** - Complete dark theme
+- [ ] **Advanced Analytics** - Predictive analytics and forecasting
 - [ ] **Email Campaigns** - Built-in email marketing
-- [ ] **Affiliate Program** - Ticket sales commissions
 
-#### 🌍 Expansion Plans
-- [ ] **Regional Support** - Expand to East Africa
-- [ ] **Currency Support** - Multi-currency pricing
-- [ ] **Payment Gateways** - Stripe, PayPal, Flutterwave
-- [ ] **Local Languages** - Support 10+ African languages
-
-### 💡 Innovation Ideas
-
-- 🎯 **AR Event Previews** - Visualize venues in AR
-- 🤖 **AI Event Assistant** - Chatbot for event help
-- 🎤 **Voice Booking** - Book events with voice commands
-- 📸 **Face Recognition Check-in** - Touchless entry
-- 🌐 **Metaverse Events** - Virtual reality events
-- 🔔 **Smart Wearables** - Apple Watch/WearOS support
+#### Q3-Q4 2026
+- [ ] **Live Streaming** - Virtual and hybrid events
+- [ ] **NFT Tickets** - Blockchain-based tickets
+- [ ] **AI Recommendations** - Personalized event suggestions
+- [ ] **Networking Features** - In-app attendee matching
+- [ ] **White Label** - Fully branded platform option
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions from the community! Here's how you can help:
+We welcome contributions! Here's how:
 
 ### Ways to Contribute
-
-1. 🐛 **Report Bugs** - Found a bug? [Open an issue](https://github.com/lewiii254/event-tribe-kenya/issues)
-2. 💡 **Suggest Features** - Have ideas? [Request a feature](https://github.com/lewiii254/event-tribe-kenya/issues)
-3. 📖 **Improve Documentation** - Help us write better docs
-4. 🔧 **Submit PRs** - Fix bugs or add features
-5. 🎨 **Design** - Contribute UI/UX improvements
-6. 🌍 **Translations** - Help translate the app
+1. 🐛 Report bugs via [Issues](https://github.com/lewiii254/event-tribe-kenya/issues)
+2. 💡 Suggest features
+3. 📖 Improve documentation
+4. 🔧 Submit pull requests
+5. 🎨 Contribute designs
 
 ### Development Workflow
 
 ```bash
-# 1. Fork the repository
-# 2. Clone your fork
+# Fork and clone
 git clone https://github.com/YOUR_USERNAME/event-tribe-kenya.git
 
-# 3. Create a feature branch
+# Create feature branch
 git checkout -b feature/amazing-feature
 
-# 4. Make your changes
-# 5. Commit changes
-git commit -m "Add amazing feature"
+# Make changes and commit
+git commit -m "feat: add amazing feature"
 
-# 6. Push to branch
+# Push and create PR
 git push origin feature/amazing-feature
-
-# 7. Open a Pull Request
 ```
 
-### Code Style Guidelines
-
-- ✅ Use TypeScript for all new code
-- ✅ Follow existing code formatting
-- ✅ Write meaningful commit messages
-- ✅ Add comments for complex logic
-- ✅ Update documentation for new features
-- ✅ Test your changes thoroughly
-
-### Commit Message Format
+### Commit Convention
 
 ```
 type(scope): subject
 
-body (optional)
-
-footer (optional)
+feat: new feature
+fix: bug fix
+docs: documentation
+style: formatting
+refactor: code restructuring
+test: tests
+chore: maintenance
 ```
-
-**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-
-**Example:**
-```
-feat(booking): add group discount calculation
-
-- Implement 10% discount for 5+ tickets
-- Implement 15% discount for 10+ tickets
-- Add discount display in booking summary
-
-Closes #123
-```
-
----
-
-## 🏆 Competitive Advantages
-
-### 🎯 What Sets Us Apart
-
-| Feature | EventTribe Kenya | Competitor A | Competitor B | Enterprise Solutions |
-|---------|------------------|--------------|--------------|----------------------|
-| 🚀 Real-time Updates | ✅ Yes | ❌ No | ⚠️ Limited | ✅ Yes |
-| 👥 Group Discounts | ✅ Auto | ❌ No | ❌ No | ⚠️ Manual |
-| 🤖 AI Recommendations | ✅ Free | ❌ No | ❌ No | 💰 Premium |
-| 📋 Waitlist System | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
-| 📊 Analytics Dashboard | ✅ Free | ❌ No | ⚠️ Basic | 💰 Paid |
-| 📅 Calendar Export | ✅ All | ⚠️ Google Only | ❌ No | ✅ All |
-| 🎟️ QR Check-in | ✅ Yes | ❌ No | ⚠️ Limited | ✅ Yes |
-| 💬 WhatsApp Integration | ✅ Yes | ❌ No | ❌ No | ⚠️ API Only |
-| 🐦 Early Bird Pricing | ✅ Auto | ⚠️ Manual | ❌ No | ✅ Yes |
-| 💰 M-Pesa Payment | ✅ Native | ❌ No | ❌ No | ⚠️ Custom |
-| 📱 Mobile Responsive | ✅ Perfect | ⚠️ Basic | ⚠️ Basic | ✅ Good |
-| 🔐 Enterprise Security | ✅ Yes | ⚠️ Basic | ⚠️ Basic | ✅ Yes |
-
-### 📈 Success Metrics
-
-- ⚡ **40% Increase** in event discovery through AI recommendations
-- 💰 **15% Boost** in multi-ticket bookings via group discounts
-- 📊 **25% Higher** early booking rates with early bird pricing
-- 🎫 **30% Conversion** from waitlist to confirmed bookings
-- ⚙️ **90% Faster** event check-in with QR codes
-- 💳 **99.9% Success** rate with M-Pesa payments
-
----
-
-## 🛡️ Security & Privacy
-
-### Security Features
-
-- 🔐 **Row Level Security (RLS)** - Database-level access control
-- 🔒 **Data Encryption** - In transit (TLS) and at rest
-- 🛡️ **Authentication** - Secure JWT-based auth
-- 🔑 **Password Hashing** - bcrypt encryption
-- 🚫 **SQL Injection Protection** - Parameterized queries
-- 🔍 **XSS Prevention** - Input sanitization
-- 📝 **Audit Logs** - Track all critical actions
-
-### Privacy Compliance
-
-- ✅ GDPR-ready data handling
-- ✅ User data export capability
-- ✅ Right to deletion
-- ✅ Transparent privacy policy
-- ✅ Secure payment processing (PCI DSS)
 
 ---
 
 ## 📝 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-### What this means:
-- ✅ Commercial use allowed
-- ✅ Modification allowed
-- ✅ Distribution allowed
-- ✅ Private use allowed
-- ❗ License and copyright notice required
+This project is licensed under the **MIT License** - see [LICENSE](LICENSE) for details.
 
 ---
 
 ## 💬 Support
 
 ### Get Help
-
 - 📧 **Email**: support@eventtribekenya.com
-- 💬 **Community Forum**: [discussions](https://github.com/lewiii254/event-tribe-kenya/discussions)
-- 🐛 **Bug Reports**: [issues](https://github.com/lewiii254/event-tribe-kenya/issues)
-- 📖 **Documentation**: [Wiki](https://github.com/lewiii254/event-tribe-kenya/wiki)
-- 💼 **Enterprise**: enterprise@eventtribekenya.com
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/lewiii254/event-tribe-kenya/discussions)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/lewiii254/event-tribe-kenya/issues)
 
 ### Community
-
 - 🐦 **Twitter**: [@EventTribeKE](https://twitter.com/EventTribeKE)
 - 📘 **Facebook**: [EventTribe Kenya](https://facebook.com/eventtribekenya)
 - 📸 **Instagram**: [@eventtribekenya](https://instagram.com/eventtribekenya)
-- 💼 **LinkedIn**: [EventTribe Kenya](https://linkedin.com/company/eventtribekenya)
-
-### FAQ
-
-<details>
-<summary>❓ How do I reset my password?</summary>
-
-Go to the login page and click "Forgot Password". Enter your email and follow the reset instructions.
-</details>
-
-<details>
-<summary>❓ Can I cancel my booking?</summary>
-
-Yes! Go to "My Bookings", select the event, and click "Cancel Booking". Refunds are processed based on the event's cancellation policy.
-</details>
-
-<details>
-<summary>❓ How do group discounts work?</summary>
-
-Group discounts are automatically applied:
-- 10% off for 5-9 tickets
-- 15% off for 10+ tickets
-</details>
-
-<details>
-<summary>❓ Is my payment secure?</summary>
-
-Yes! We use M-Pesa's secure payment gateway with encryption and PCI DSS compliance.
-</details>
-
-<details>
-<summary>❓ Can I export events to my calendar?</summary>
-
-Yes! Click "Add to Calendar" on any event to export to Google Calendar, Outlook, or download iCal.
-</details>
 
 ---
 
 ## 🙏 Acknowledgments
 
-Special thanks to:
-
-- 🎨 **shadcn/ui** - For the beautiful component library
-- 🗄️ **Supabase** - For the amazing backend platform
-- ⚛️ **React Team** - For the incredible framework
-- 💚 **Open Source Community** - For inspiration and tools
-- 👥 **Our Users** - For feedback and support
+- 🎨 **shadcn/ui** - Beautiful component library
+- ☁️ **Lovable** - Cloud platform and deployment
+- ⚛️ **React Team** - Amazing framework
+- 💚 **Open Source Community** - Inspiration and tools
 - 🇰🇪 **Kenya** - Our home and inspiration
-
----
-
-## 📊 Project Stats
-
-![GitHub stars](https://img.shields.io/github/stars/lewiii254/event-tribe-kenya?style=social)
-![GitHub forks](https://img.shields.io/github/forks/lewiii254/event-tribe-kenya?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/lewiii254/event-tribe-kenya?style=social)
-![GitHub issues](https://img.shields.io/github/issues/lewiii254/event-tribe-kenya)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/lewiii254/event-tribe-kenya)
-![GitHub last commit](https://img.shields.io/github/last-commit/lewiii254/event-tribe-kenya)
-
----
-
-## 🚀 Quick Deploy
-
-### Deploy with Lovable
-
-[![Deploy to Lovable](https://img.shields.io/badge/Deploy%20to-Lovable-blueviolet?style=for-the-badge)](https://lovable.dev/projects/718058d7-e10f-49b4-baae-566d0765853c)
-
-1. Visit [Lovable Project](https://lovable.dev/projects/718058d7-e10f-49b4-baae-566d0765853c)
-2. Click **Share → Publish**
-3. Your app is live! 🎉
-
-### Connect Custom Domain
-
-1. Navigate to **Project → Settings → Domains**
-2. Click **Connect Domain**
-3. Follow the DNS configuration steps
-4. [Learn more](https://docs.lovable.dev/features/custom-domain)
 
 ---
 
@@ -925,10 +603,12 @@ Special thanks to:
 
 **EventTribe Kenya** - *Connecting Communities Through Events*
 
+[![Deploy to Lovable](https://img.shields.io/badge/Deploy%20to-Lovable-blueviolet?style=for-the-badge)](https://lovable.dev/projects/718058d7-e10f-49b4-baae-566d0765853c)
+
 [⬆ Back to Top](#-eventtribe-kenya)
 
 ---
 
-**Star ⭐ this repo if you find it helpful!**
+**⭐ Star this repo if you find it helpful!**
 
 </div>
