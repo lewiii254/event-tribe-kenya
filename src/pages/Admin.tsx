@@ -90,7 +90,6 @@ const Admin = () => {
 
   const fetchAdminData = async () => {
     try {
-      // @ts-expect-error - user_roles relation
       const { data: profilesData, error: profilesError } = await supabase
         .from("profiles")
         .select("*, user_roles(role)")

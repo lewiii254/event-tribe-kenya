@@ -11,7 +11,7 @@ import techEvent from "@/assets/events/tech-event.jpg";
 import musicEvent from "@/assets/events/music-event.jpg";
 import travelEvent from "@/assets/events/travel-event.jpg";
 import partyEvent from "@/assets/events/party-event.jpg";
-import { Event, Profile } from "@/types";
+import { Event, type Profile } from "@/types";
 import { User } from "@supabase/supabase-js";
 
 interface BookingWithEvent {
