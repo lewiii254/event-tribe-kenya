@@ -3,10 +3,12 @@
 ## Overview
 This guide explains how to set up the admin user for EventTribe Kenya.
 
-## Admin User Credentials
+## Admin User Email
 The system is configured to automatically grant admin privileges to the following email address:
 - **Email**: `ngondimarklewis@gmail.com`
-- **Password**: `mark2006`
+- **Password**: Contact the system administrator for the default password
+
+**Security Note**: The default admin password should be changed immediately after first login for security purposes.
 
 ## How It Works
 
@@ -23,10 +25,14 @@ If the admin user doesn't exist yet:
 3. Enter:
    - Username: (your choice, e.g., "marklewis")
    - Email: `ngondimarklewis@gmail.com`
-   - Password: `mark2006`
+   - Password: (create a secure password - minimum 6 characters)
 4. Submit the form
 5. The system will automatically create the user profile and assign the admin role
 6. You can now access the admin panel at `/admin`
+
+**Important**: Choose a strong password during signup. The password requirements are:
+- Minimum 6 characters
+- Combination of letters, numbers, and special characters recommended
 
 #### 2. Existing User
 If a user with email `ngondimarklewis@gmail.com` already exists:
@@ -56,9 +62,11 @@ The admin panel allows you to:
 
 ## Security Notes
 
-1. **Change Default Password**: After first login, consider changing the default password to something more secure
-2. **Role-Based Access**: Only users with the admin role can access the admin panel
-3. **Row Level Security**: The database enforces row-level security policies to protect user data
+1. **Strong Password**: Always use a strong, unique password for admin accounts
+2. **Password Management**: Consider using a password manager to store admin credentials securely
+3. **Role-Based Access**: Only users with the admin role can access the admin panel
+4. **Row Level Security**: The database enforces row-level security policies to protect user data
+5. **Account Security**: Enable two-factor authentication if available in your authentication provider
 
 ## Troubleshooting
 
@@ -75,10 +83,12 @@ If the admin role isn't being assigned automatically:
 3. Or verify migrations are applied in your Supabase dashboard
 
 ### Already Have an Account
-If you already registered with this email:
-- Just log in with your existing password
+If you already registered with the admin email (`ngondimarklewis@gmail.com`):
+- Just log in with your existing account password
 - The migration will automatically grant you admin privileges
 - Navigate to `/admin` to verify access
+
+**Note**: Contact the original account owner if you don't have access to the existing account.
 
 ## Additional Admin Users
 
