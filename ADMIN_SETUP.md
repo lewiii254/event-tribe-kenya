@@ -6,9 +6,9 @@ This guide explains how to set up the admin user for EventTribe Kenya.
 ## Admin User Email
 The system is configured to automatically grant admin privileges to the following email address:
 - **Email**: `ngondimarklewis@gmail.com`
-- **Password**: Contact the system administrator for the default password
+- **Password**: You will create a secure password during initial signup
 
-**Security Note**: The default admin password should be changed immediately after first login for security purposes.
+**Security Note**: As an admin account with elevated privileges, ensure you create a strong password following the security guidelines in this document.
 
 ## How It Works
 
@@ -30,9 +30,15 @@ If the admin user doesn't exist yet:
 5. The system will automatically create the user profile and assign the admin role
 6. You can now access the admin panel at `/admin`
 
-**Important**: Choose a strong password during signup. The password requirements are:
-- Minimum 6 characters
-- Combination of letters, numbers, and special characters recommended
+**Important**: Choose a strong password during signup. Password requirements:
+- **Minimum**: 6 characters (enforced by system)
+- **Recommended for Admin**: 12+ characters for enhanced security
+- Must include:
+  - Uppercase and lowercase letters
+  - Numbers
+  - Special characters (!@#$%^&*)
+- Avoid common words or predictable patterns
+- Consider using a passphrase for better security and memorability
 
 #### 2. Existing User
 If a user with email `ngondimarklewis@gmail.com` already exists:
@@ -62,11 +68,27 @@ The admin panel allows you to:
 
 ## Security Notes
 
-1. **Strong Password**: Always use a strong, unique password for admin accounts
-2. **Password Management**: Consider using a password manager to store admin credentials securely
-3. **Role-Based Access**: Only users with the admin role can access the admin panel
-4. **Row Level Security**: The database enforces row-level security policies to protect user data
-5. **Account Security**: Enable two-factor authentication if available in your authentication provider
+### Password Security
+1. **Strong Password Requirements**: Admin accounts should use passwords with:
+   - **Minimum 12 characters** (even though system minimum is 6)
+   - Mix of uppercase, lowercase, numbers, and special characters
+   - No dictionary words, personal information, or common patterns
+   - Unique password not used elsewhere
+2. **Password Management**: Use a reputable password manager (e.g., 1Password, LastPass, Bitwarden) to:
+   - Generate strong, random passwords
+   - Securely store admin credentials
+   - Enable secure sharing if needed
+
+### Account Security
+3. **Two-Factor Authentication**: Enable 2FA through your authentication provider if available
+4. **Regular Password Updates**: Change admin password periodically (every 90 days recommended)
+5. **Access Monitoring**: Regularly review admin access logs for suspicious activity
+
+### System Security
+6. **Role-Based Access**: Only users with the admin role can access the admin panel
+7. **Row Level Security**: The database enforces row-level security policies to protect user data
+8. **Principle of Least Privilege**: Only assign admin role to users who genuinely need it
+9. **Session Management**: Always log out from shared or public devices
 
 ## Troubleshooting
 
