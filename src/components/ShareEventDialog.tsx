@@ -58,10 +58,10 @@ const ShareEventDialog = ({ eventTitle, eventId }: ShareEventDialogProps) => {
           <Share2 className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" aria-describedby="share-description">
         <DialogHeader>
           <DialogTitle>Share Event</DialogTitle>
-          <DialogDescription>
+          <DialogDescription id="share-description">
             Share this event with your friends and network
           </DialogDescription>
         </DialogHeader>

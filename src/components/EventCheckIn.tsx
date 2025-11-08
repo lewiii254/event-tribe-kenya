@@ -122,10 +122,10 @@ const EventCheckIn = ({ eventId, isOrganizer }: EventCheckInProps) => {
           Check-In System
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md" aria-describedby="checkin-description">
         <DialogHeader>
           <DialogTitle>Event Check-In</DialogTitle>
-          <DialogDescription>
+          <DialogDescription id="checkin-description">
             Scan or enter attendee QR codes to verify tickets
           </DialogDescription>
         </DialogHeader>

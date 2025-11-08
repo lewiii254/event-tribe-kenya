@@ -18,35 +18,27 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    const checkRole = async (userId: string) => {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .in("role", ["organizer", "admin"])
+        .maybeSingle();
+      setIsOrganizer(!!data);
+    };
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
-      
       if (session?.user) {
-        const { data: roleData } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", session.user.id)
-          .in("role", ["organizer", "admin"])
-          .maybeSingle();
-        
-        setIsOrganizer(!!roleData);
+        setTimeout(() => checkRole(session.user.id), 0);
       }
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user ?? null);
-      
       if (session?.user) {
-        const { data: roleData } = await supabase
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", session.user.id)
-          .in("role", ["organizer", "admin"])
-          .maybeSingle();
-        
-        setIsOrganizer(!!roleData);
+        setTimeout(() => checkRole(session.user.id), 0);
       } else {
         setIsOrganizer(false);
       }

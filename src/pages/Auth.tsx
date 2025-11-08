@@ -19,12 +19,11 @@ const Auth = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate("/");
-      }
-    });
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) navigate("/", { replace: true });
+    };
+    checkSession();
   }, [navigate]);
 
   const handleAuth = async (e: React.FormEvent) => {

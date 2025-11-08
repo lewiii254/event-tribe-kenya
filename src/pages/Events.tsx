@@ -46,10 +46,19 @@ const Events = () => {
       let query = supabase
         .from("events")
         .select(`
-          *,
-          profiles:organizer_id (username, avatar_url),
-          bookings (count)
-        `);
+          id,
+          title,
+          category,
+          location,
+          date,
+          price,
+          is_free,
+          image_url,
+          organizer_id,
+          max_attendees,
+          profiles:organizer_id (username, avatar_url)
+        `, { count: 'exact' })
+        .gte('date', new Date().toISOString());
 
       if (selectedCategory !== "All") {
         query = query.eq("category", selectedCategory as EventCategory);
@@ -92,16 +101,8 @@ const Events = () => {
       let eventsWithImages = (data || []).map((event, idx) => ({
         ...event,
         image_url: event.image_url || eventImages[idx % eventImages.length],
+        bookings: [{ count: 0 }]
       })) as Event[];
-
-      // Client-side sorting for popularity
-      if (sortBy === "popularity") {
-        eventsWithImages = eventsWithImages.sort((a, b) => {
-          const countA = a.bookings?.[0]?.count || 0;
-          const countB = b.bookings?.[0]?.count || 0;
-          return countB - countA;
-        });
-      }
 
       setEvents(eventsWithImages);
     } catch (error) {

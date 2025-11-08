@@ -25,11 +25,20 @@ const Index = () => {
       let query = supabase
         .from("events")
         .select(`
-          *,
-          profiles:organizer_id (username, avatar_url),
-          bookings (count)
-        `)
-        .order("date", { ascending: true });
+          id,
+          title,
+          category,
+          location,
+          date,
+          price,
+          is_free,
+          image_url,
+          organizer_id,
+          profiles:organizer_id (username, avatar_url)
+        `, { count: 'exact' })
+        .gte('date', new Date().toISOString())
+        .order("date", { ascending: true })
+        .limit(12);
 
       if (selectedCategory !== "All") {
         query = query.eq("category", selectedCategory as EventCategory);
@@ -44,6 +53,7 @@ const Index = () => {
       const eventsWithImages = (data || []).map((event, idx) => ({
         ...event,
         image_url: event.image_url || eventImages[idx % eventImages.length],
+        bookings: [{ count: 0 }]
       })) as Event[];
 
       setEvents(eventsWithImages);
