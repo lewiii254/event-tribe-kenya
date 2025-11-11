@@ -6,13 +6,12 @@
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Lovable Cloud](https://img.shields.io/badge/Lovable-Cloud-blueviolet?style=for-the-badge)](https://lovable.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 
 **🚀 Discover · 🎫 Book · 📊 Manage · 🎉 Celebrate**
 
-[Live Demo](https://lovable.dev/projects/718058d7-e10f-49b4-baae-566d0765853c) · [Report Bug](https://github.com/lewiii254/event-tribe-kenya/issues) · [Request Feature](https://github.com/lewiii254/event-tribe-kenya/issues)
+[Live Demo](https://event-tribe-kenya.vercel.app/) · [Report Bug](https://github.com/lewiii254/event-tribe-kenya/issues) · [Request Feature](https://github.com/lewiii254/event-tribe-kenya/issues)
 
 </div>
 
@@ -138,7 +137,7 @@ To revolutionize event management in Kenya by providing a seamless, technology-d
 ┌─────────────────────────────────────────────────────────────────┐
 │                  API & INTEGRATION LAYER                         │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │   Lovable    │  │   M-Pesa     │  │  Calendar    │          │
+│  │              │  │   M-Pesa     │  │  Calendar    │          │
 │  │    Cloud     │  │  Payment API │  │   Services   │          │
 │  └──────────────┘  └──────────────┘  └──────────────┘          │
 └─────────────────────────────────────────────────────────────────┘
@@ -204,7 +203,7 @@ To revolutionize event management in Kenya by providing a seamless, technology-d
 - 🎨 **Lucide React** - Beautiful icon library
 
 ### Backend & Cloud
-- ☁️ **Lovable Cloud** - Full-stack cloud platform (Supabase-powered)
+- ☁️ * Cloud** - Full-stack cloud platform (Supabase-powered)
   - PostgreSQL Database
   - Authentication & Authorization
   - Real-time Subscriptions
@@ -229,7 +228,7 @@ To revolutionize event management in Kenya by providing a seamless, technology-d
 - 🔧 **PostCSS** - CSS processing
 
 ### Deployment
-- 🚀 **Lovable Platform** - One-click deployment
+- vercel
 - 🌐 **Custom Domains** - Connect your own domain
 - 📈 **Auto-scaling** - Automatic traffic handling
 - ⚡ **Edge Functions** - Serverless logic at the edge
@@ -242,19 +241,13 @@ To revolutionize event management in Kenya by providing a seamless, technology-d
 
 - 📦 **Node.js** (v18 or higher)
 - 📥 **npm** or **bun** package manager
-- 🔑 **Lovable Account** (for Cloud features)
 - 💳 **M-Pesa Developer Account** (optional, for payment testing)
 
 ### Installation
 
-#### Method 1: Using Lovable (Recommended)
 
-1. Visit the [Lovable Project](https://lovable.dev/projects/718058d7-e10f-49b4-baae-566d0765853c)
-2. Fork or remix the project
-3. Start customizing via prompts
-4. Deploy with one click
 
-#### Method 2: Local Development
+#### Method 1: Local Development
 
 ```bash
 # 1. Clone the repository
@@ -283,7 +276,7 @@ bun run dev
 
 ### Environment Setup
 
-The project uses Lovable Cloud, so most configuration is automatic. However, for M-Pesa integration, you'll need:
+The project uses  Cloud, so most configuration is automatic. However, for M-Pesa integration, you'll need:
 
 ```env
 # M-Pesa Configuration (Optional)
@@ -410,7 +403,7 @@ Event Day → QR Check-in
 
 ## 🔌 API & Integrations
 
-### Lovable Cloud API
+### Cloud API
 
 ```typescript
 // Authentication
@@ -602,8 +595,6 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) for 
 ### 🎊 Made with ❤️ in Kenya 🇰🇪
 
 **EventTribe Kenya** - *Connecting Communities Through Events*
-
-[![Deploy to Lovable](https://img.shields.io/badge/Deploy%20to-Lovable-blueviolet?style=for-the-badge)](https://lovable.dev/projects/718058d7-e10f-49b4-baae-566d0765853c)
 
 [⬆ Back to Top](#-eventtribe-kenya)
 
