@@ -98,7 +98,7 @@ const Events = () => {
       if (error) throw error;
 
       const eventImages = [techEvent, musicEvent, travelEvent, partyEvent];
-      let eventsWithImages = (data || []).map((event, idx) => ({
+      const eventsWithImages = (data || []).map((event, idx) => ({
         ...event,
         image_url: event.image_url || eventImages[idx % eventImages.length],
         bookings: [{ count: 0 }]
