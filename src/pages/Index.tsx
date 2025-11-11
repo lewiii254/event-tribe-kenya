@@ -3,8 +3,10 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import CategoryFilter from "@/components/CategoryFilter";
 import EventCard from "@/components/EventCard";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import EmptyState from "@/components/EmptyState";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { Calendar } from "lucide-react";
 import techEvent from "@/assets/events/tech-event.jpg";
 import musicEvent from "@/assets/events/music-event.jpg";
 import travelEvent from "@/assets/events/travel-event.jpg";
@@ -112,15 +114,15 @@ const Index = () => {
           </div>
 
           {loading ? (
-            <div className="flex justify-center items-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
+            <LoadingSpinner size="lg" text="Discovering awesome events..." className="py-20" />
           ) : events.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-xl text-muted-foreground">
-                No events found in this category. Be the first to create one!
-              </p>
-            </div>
+            <EmptyState
+              icon={Calendar}
+              title="No events found in this category"
+              description="Be the first to create an amazing event in this category and start building your community!"
+              actionLabel="Create Event"
+              actionLink="/create"
+            />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-fade-in">
               {events.map((event) => (

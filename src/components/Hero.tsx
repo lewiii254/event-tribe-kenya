@@ -25,15 +25,15 @@ const Hero = () => {
             <span className="text-sm text-white font-medium">Join Your Tribe Today</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 animate-slide-up leading-tight px-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-6 animate-slide-up leading-tight px-4 drop-shadow-lg">
             Discover Events That
             <br />
-            <span className="bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-white/90 to-white/70 bg-clip-text text-transparent drop-shadow-lg">
               Bring People Together
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-8 sm:mb-12 max-w-2xl mx-auto animate-fade-in px-4">
+          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 mb-8 sm:mb-12 max-w-2xl mx-auto animate-fade-in px-4 drop-shadow-md">
             Connect with your local community through exciting events, meetups, and experiences in Kenya
           </p>
 
@@ -41,18 +41,18 @@ const Hero = () => {
             <Button 
               size="lg" 
               asChild
-              className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl transition-all text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full"
+              className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 shadow-xl hover:shadow-2xl transition-all duration-300 text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full font-semibold hover:scale-105 active:scale-95"
             >
               <Link to="/events">
                 Browse Events
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button 
               size="lg" 
               variant="outline"
               asChild
-              className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-primary transition-all text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full"
+              className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-primary transition-all duration-300 text-base sm:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full font-semibold backdrop-blur-sm hover:scale-105 active:scale-95"
             >
               <Link to="/create">Create Event</Link>
             </Button>

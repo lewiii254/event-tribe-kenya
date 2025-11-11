@@ -59,28 +59,28 @@ const EventCard = ({
 
   return (
     <Link to={`/event/${id}`}>
-      <Card className="group overflow-hidden border-0 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300 hover:-translate-y-2 bg-card">
+      <Card className="group overflow-hidden border-0 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-hover)] transition-all duration-300 hover:-translate-y-2 bg-card animate-fade-in">
         <div className="relative overflow-hidden">
           <img
             src={image}
             alt={title}
-            className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           
           <button
             onClick={handleLike}
             className={cn(
-              "absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all duration-300",
+              "absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 active:scale-95",
               liked 
-                ? "bg-secondary text-secondary-foreground scale-110" 
+                ? "bg-secondary text-secondary-foreground shadow-lg" 
                 : "bg-white/20 text-white hover:bg-white/30"
             )}
           >
-            <Heart className={cn("w-5 h-5", liked && "fill-current")} />
+            <Heart className={cn("w-5 h-5 transition-all", liked && "fill-current animate-scale-in")} />
           </button>
 
-          <Badge className={cn("absolute top-3 left-3", categoryColors[category] || "bg-primary")}>
+          <Badge className={cn("absolute top-3 left-3 shadow-md", categoryColors[category] || "bg-primary")}>
             {category}
           </Badge>
         </div>
@@ -108,17 +108,17 @@ const EventCard = ({
           <div className="flex items-center justify-between pt-4 border-t border-border">
             <div>
               {isFree ? (
-                <span className="text-lg font-bold text-primary">Free</span>
+                <span className="text-lg font-bold text-primary animate-pulse">Free</span>
               ) : (
-                <span className="text-lg font-bold text-foreground">KSh {price}</span>
+                <span className="text-lg font-bold text-foreground">KSh {price.toLocaleString()}</span>
               )}
             </div>
             <Button 
               size="sm" 
-              className="bg-primary hover:bg-primary/90 rounded-full"
+              className="bg-primary hover:bg-primary/90 rounded-full shadow-md hover:shadow-lg"
               onClick={(e) => e.preventDefault()}
             >
-              Join Event
+              View Details
             </Button>
           </div>
         </div>
