@@ -210,3 +210,5 @@ All critical errors have been fixed. The Event Tribe Kenya application is now:
 - Following industry best practices
 
 The remaining 7 warnings are in UI library components and do not affect functionality.
+
+
