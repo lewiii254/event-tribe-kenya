@@ -2,9 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import CategoryFilter from "@/components/CategoryFilter";
 import EventCard from "@/components/EventCard";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import EmptyState from "@/components/EmptyState";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Search, SlidersHorizontal } from "lucide-react";
+import { Calendar, Search, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -98,7 +100,7 @@ const Events = () => {
       if (error) throw error;
 
       const eventImages = [techEvent, musicEvent, travelEvent, partyEvent];
-      let eventsWithImages = (data || []).map((event, idx) => ({
+      const eventsWithImages = (data || []).map((event, idx) => ({
         ...event,
         image_url: event.image_url || eventImages[idx % eventImages.length],
         bookings: [{ count: 0 }]
@@ -248,15 +250,15 @@ const Events = () => {
           </div>
 
           {loading ? (
-            <div className="flex justify-center items-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
+            <LoadingSpinner size="lg" text="Loading amazing events..." className="py-20" />
           ) : events.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-xl text-muted-foreground">
-                {searchQuery ? "No events match your search. Try different keywords!" : "No events found. Be the first to create one!"}
-              </p>
-            </div>
+            <EmptyState
+              icon={Calendar}
+              title={searchQuery ? "No events match your search" : "No events found"}
+              description={searchQuery ? "Try different keywords or clear your filters to see more events!" : "Be the first to create an amazing event and bring people together!"}
+              actionLabel="Create Event"
+              actionLink="/create"
+            />
           ) : (
             <div>
               <p className="text-sm text-muted-foreground mb-4">
